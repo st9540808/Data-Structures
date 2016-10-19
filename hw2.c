@@ -11,10 +11,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+enum position {	UPPERLEFT_CORNER = 1, UPPERRIGHT_CORNER = 2, 
+				LOWERLEFT_CORNER = 3, LOWERRIGHT_CORNER = 4,
+				LEFT_WALL = 4, RIGHT_WALL = 5, UPPER_WALL = 6, LOWER_WALL = 7,
+				MIDDLE = 8 }; 
 
 void randomWalk(int, int);
 
-void identifyPositions();
+enum position currentPosition(const int ibug, const int jbug, const int n, const int m);
+
 
 int** initializeCount(int, int);
 void print(int**, int, int); //print out (1)total number of legal moves (2)the final count array  
@@ -32,10 +37,35 @@ int main()
 void randomWalk(int n, int m)
 {
 	int** count = initializeCount(n, m);
-	
+	int ibug = 2, jbug = 1;
 
+	for(int i = 0; i < 50000; ++i)
+	{
+		
+
+	}
+	
+	printf("%d\n", currentPosition(ibug, jbug, n, m));
 	print(count, n, m);
 	freeCount(count, n);
+}
+
+enum position currentPosition(const int ibug, const int jbug, const int n, const int m)
+{
+	if( (ibug < n-1 && ibug > 0) && (jbug < m-1 && jbug > 0) )
+		return MIDDLE;	 
+	
+	if( ibug < n-1 && ibug > 0 )
+	{	
+		if( jbug == 0 )   return LEFT_WALL;
+		if( jbug == m-1 ) return RIGHT_WALL;
+	}
+	if( jbug < m-1 && jbug > 0 )
+	{
+		if( ibug == 0 )   return UPPER_WALL;
+		if( ibug == n-1 ) return LOWER_WALL;
+	}
+
 }
 
 
