@@ -13,8 +13,8 @@
 
 enum position {	UPPERLEFT_CORNER = 1, UPPERRIGHT_CORNER = 2, 
 				LOWERLEFT_CORNER = 3, LOWERRIGHT_CORNER = 4,
-				LEFT_WALL = 4, RIGHT_WALL = 5, UPPER_WALL = 6, LOWER_WALL = 7,
-				MIDDLE = 8 }; 
+				LEFT_WALL = 5, RIGHT_WALL = 6, UPPER_WALL = 7, LOWER_WALL = 8,
+				MIDDLE = 9 }; 
 
 void randomWalk(int, int);
 
@@ -36,16 +36,23 @@ int main()
 
 void randomWalk(int n, int m)
 {
+	const int imove[8] = {-1, 0, 1, 1, 1, 0, -1, -1},
+			  jmove[8] = {1 ,1 ,1 ,0 ,-1 ,-1 ,-1 ,0};
 	int** count = initializeCount(n, m);
 	int ibug = 2, jbug = 1;
 
-	for(int i = 0; i < 50000; ++i)
+	count[ibug][jbug]++;
+	for(int i = 0; i < 1; ++i)
 	{
-		
+		switch( currentPosition(ibug, jbug, n, m) )
+		{
+			case MIDDLE	: printf("middle\n");
+						  break;
+		}
 
 	}
 	
-	printf("%d\n", currentPosition(ibug, jbug, n, m));
+//	printf("%d\n", currentPosition(0, 0, n, m));
 	print(count, n, m);
 	freeCount(count, n);
 }
@@ -66,6 +73,19 @@ enum position currentPosition(const int ibug, const int jbug, const int n, const
 		if( ibug == n-1 ) return LOWER_WALL;
 	}
 
+	if( ibug == 0 )
+	{
+		if( jbug == 0 )   return UPPERLEFT_CORNER;
+		if( jbug == m-1 ) return UPPERRIGHT_CORNER;
+	}
+	if( ibug == n-1 )
+	{
+		if( jbug == 0 )   return LOWERLEFT_CORNER;
+		if( jbug == m-1 ) return LOWERRIGHT_CORNER;
+	}
+	
+	printf("error position\n");
+	exit(EXIT_FAILURE);
 }
 
 
