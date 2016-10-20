@@ -21,16 +21,17 @@ enum position {	UPPERLEFT_CORNER = 1, UPPERRIGHT_CORNER = 2,
 void randomWalk(int, int);
 int randomSelectNextMove(const int ibug, const int jbug, const int n, const int m);
 enum position currentPosition(const int ibug, const int jbug, const int n, const int m);
+int	allTileTouched(int **count, const int n, const int m);
 
 
 int** initializeCount(int, int);
-void print(int**, int, int); //print out (1)total number of legal moves (2)the final count array  
+void print(int**, int, int, int); //print out (1)total number of legal moves (2)the final count array  
 void freeCount(int**, int);
 
 
 int main()
 {	
-	int n = 5, m = 5;
+	int n = 15, m = 23;
 
 	srand((unsigned)time(NULL));
 	randomWalk(n, m);
@@ -43,20 +44,22 @@ void randomWalk(int n, int m)
 	const int imove[8] = {-1, 0, 1, 1, 1, 0, -1, -1},
 			  jmove[8] = {1 ,1 ,1 ,0 ,-1 ,-1 ,-1 ,0};
 	int** count = initializeCount(n, m);
-	int ibug = 2, jbug = 1, totalMoves = 0, nextMove = 0;
+	int ibug = 0, jbug = 0, totalMoves = 0, nextMove = 0;
 	
 	count[ibug][jbug]++;
-	for(int i = 0; i < 1; ++i)
+	for(int i = 0; i < 50000; ++i)
 	{
+		nextMove = randomSelectNextMove(ibug, jbug, n, m);
+		
 		ibug = ibug + imove[nextMove];
 		jbug = jbug + jmove[nextMove];
+		
 		++count[ibug][jbug];
 		++totalMoves;
+		if( allTileTouched(count, n, m) ) break;
 	}
 	
-
-//	printf("%d\n", rand());
-	print(count, n, m);
+	print(count, n, m, totalMoves);
 	freeCount(count, n);
 }
 
@@ -72,10 +75,10 @@ int randomSelectNextMove(const int ibug, const int jbug, const int n, const int 
 		case UPPER_WALL : return nextMove[rand() % 5 + 1];
 		case LOWER_WALL : return nextMove[rand() % 5 + 5];
 		
-		case UPPERLEFT_CORNER :;
-		case LOWERLEFT_CORNER :;
-		case LOWERRIGHT_CORNER :;
-		case UPPERRIGHT_CORNER :;
+		case UPPERLEFT_CORNER : return nextMove[rand() % 3 + 1];
+		case LOWERLEFT_CORNER :	return nextMove[rand() % 3 + 7];
+		case UPPERRIGHT_CORNER : return nextMove[rand() % 3 + 3];
+		case LOWERRIGHT_CORNER : return nextMove[rand() % 3 + 5];
 		
 		default : fprintf(stderr, "illegal position\n");
 					   exit(EXIT_FAILURE);
@@ -113,7 +116,13 @@ enum position currentPosition(const int ibug, const int jbug, const int n, const
 	exit(EXIT_FAILURE);
 }
 
-
+int	allTileTouched(int **count, const int n, const int m)
+{
+	for(int i = 0; i < n; ++i)
+		for(int j = 0; j < m; ++j)
+			if( count[i][j] == 0 ) return 0; // not all tiles was touched, return 0
+	return 1; // all tiles was touched
+}
 
 
 int** initializeCount(int n, int m)
@@ -131,13 +140,16 @@ int** initializeCount(int n, int m)
 	return count;
 }
 
-void print(int** count, int n, int m)
+void print(int** count, int n, int m, int totalMoves)
 {
+	//(1) print the total number of legal moves
+	printf("total number of legal moves : %d\n", totalMoves);
+	
 	//(2) print final count array
 	for(int i = 0; i < n; ++i)
 	{
 		for(int j = 0; j < m; ++j)
-			printf("%d ", count[i][j]);
+			printf("%3d ", count[i][j]);
 		printf("\n");
 	}
 }
