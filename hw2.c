@@ -10,14 +10,16 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 enum position {	UPPERLEFT_CORNER = 1, UPPERRIGHT_CORNER = 2, 
 				LOWERLEFT_CORNER = 3, LOWERRIGHT_CORNER = 4,
 				LEFT_WALL = 5, RIGHT_WALL = 6, UPPER_WALL = 7, LOWER_WALL = 8,
 				MIDDLE = 9 }; 
 
-void randomWalk(int, int);
 
+void randomWalk(int, int);
+int randomSelectNextMove(const int ibug, const int jbug, const int n, const int m);
 enum position currentPosition(const int ibug, const int jbug, const int n, const int m);
 
 
@@ -30,7 +32,9 @@ int main()
 {	
 	int n = 5, m = 5;
 
+	srand((unsigned)time(NULL));
 	randomWalk(n, m);
+	
 	return 0;
 }
 
@@ -39,22 +43,43 @@ void randomWalk(int n, int m)
 	const int imove[8] = {-1, 0, 1, 1, 1, 0, -1, -1},
 			  jmove[8] = {1 ,1 ,1 ,0 ,-1 ,-1 ,-1 ,0};
 	int** count = initializeCount(n, m);
-	int ibug = 2, jbug = 1;
-
+	int ibug = 2, jbug = 1, totalMoves = 0, nextMove = 0;
+	
 	count[ibug][jbug]++;
 	for(int i = 0; i < 1; ++i)
 	{
-		switch( currentPosition(ibug, jbug, n, m) )
-		{
-			case MIDDLE	: printf("middle\n");
-						  break;
-		}
-
+		ibug = ibug + imove[nextMove];
+		jbug = jbug + jmove[nextMove];
+		++count[ibug][jbug];
+		++totalMoves;
 	}
 	
-//	printf("%d\n", currentPosition(0, 0, n, m));
+
+//	printf("%d\n", rand());
 	print(count, n, m);
 	freeCount(count, n);
+}
+
+int randomSelectNextMove(const int ibug, const int jbug, const int n, const int m)
+{
+	const int nextMove[12] = {0,1,2,3,4,5,6,7,0,1,2,3};
+	switch( currentPosition(ibug, jbug, n, m) )
+	{
+		case MIDDLE	: return nextMove[rand() % 8];
+		
+		case LEFT_WALL : return nextMove[rand() % 5 + 7];
+		case RIGHT_WALL : return nextMove[rand() % 5 + 3];
+		case UPPER_WALL : return nextMove[rand() % 5 + 1];
+		case LOWER_WALL : return nextMove[rand() % 5 + 5];
+		
+		case UPPERLEFT_CORNER :;
+		case LOWERLEFT_CORNER :;
+		case LOWERRIGHT_CORNER :;
+		case UPPERRIGHT_CORNER :;
+		
+		default : fprintf(stderr, "illegal position\n");
+					   exit(EXIT_FAILURE);
+	}
 }
 
 enum position currentPosition(const int ibug, const int jbug, const int n, const int m)
@@ -84,7 +109,7 @@ enum position currentPosition(const int ibug, const int jbug, const int n, const
 		if( jbug == m-1 ) return LOWERRIGHT_CORNER;
 	}
 	
-	printf("error position\n");
+	fprintf(stderr, "error position\n");
 	exit(EXIT_FAILURE);
 }
 
