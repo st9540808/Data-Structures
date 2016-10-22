@@ -4,7 +4,7 @@
  *	Ch2 Aarray and Structures 
  *	p.102 #9 "random walk" problem
  *	
- *	compile info : gcc hw2.c -o test -std=c99
+ *	compile info : gcc hw2_2.c -o test -std=c99
  *	command line argument : ./test n(2<n<=40) m(2<m<=20) initialRow initialColumn
  */
 
