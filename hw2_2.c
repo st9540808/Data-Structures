@@ -1,16 +1,19 @@
 /**
  *	DataSturctures
- *	hw2
+ *	hw2_2
  *	Ch2 Aarray and Structures 
  *	p.102 #9 "random walk" problem
  *	
  *	compile option : gcc hw2.c -o test -std=c99
- *	command line argument : ./test n(2<n<=40) m(2<m<=20)
+ *	command line argument : ./test n(2<n<=40) m(2<m<=20) initialRow initialColumn
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#define TRUE  1
+#define FALSE 0
+
 
 enum position {	UPPERLEFT_CORNER = 1, UPPERRIGHT_CORNER = 2, 
 				LOWERLEFT_CORNER = 3, LOWERRIGHT_CORNER = 4,
@@ -18,10 +21,10 @@ enum position {	UPPERLEFT_CORNER = 1, UPPERRIGHT_CORNER = 2,
 				MIDDLE = 9 }; 
 
 
-void randomWalk(int, int);
-int randomSelectNextMove(const int ibug, const int jbug, const int n, const int m);
-enum position currentPosition(const int ibug, const int jbug, const int n, const int m);
-int	allTileTouched(int **count, const int n, const int m);
+void randomWalk				 (int, int, int, int);
+int  randomSelectNextMove	 (const int, const int, const int, const int);
+enum position currentPosition(const int, const int, const int, const int);
+int	 allTileTouched			 (int **, const int, const int);
 
 
 int** initializeCount(int, int);
@@ -29,52 +32,82 @@ void print(int**, int, int, int); //print out (1)total number of legal moves (2)
 void freeCount(int**, int);
 
 
-int main()
+int main(int argc, char *argv[])
 {	
-	int n = 15, m = 23;
+	if( argc != 5 )
+	{
+		fprintf(stderr, "input argument : n(2<n<=40) m(2<m<=20) initialRow initialColumn\n");
+		exit(EXIT_FAILURE);
+	}
+	
+	int inputArgument[4];
+	for(int i = 0; i < 4; ++i)
+		inputArgument[i] = strtol(argv[i+1], NULL, 10);		
+	
+	if( inputArgument[0] <= 2 || inputArgument[0] > 40 )
+	{
+		fprintf(stderr, "invalid n (Row Size)");
+		exit(EXIT_FAILURE);
+	}
+	if( inputArgument[1] <= 2 || inputArgument[1] > 20 )
+	{
+		fprintf(stderr, "invalid m (Column Size)");
+		exit(EXIT_FAILURE);
+	}
+	if( inputArgument[2] < 0 || inputArgument[2] > inputArgument[0])
+	{
+		fprintf(stderr, "invalid Initial Row Position");
+		exit(EXIT_FAILURE);
+	}
+	if( inputArgument[3] < 0 || inputArgument[3] > inputArgument[1] )
+	{
+		fprintf(stderr, "invalid Initial Column Position");
+		exit(EXIT_FAILURE);
+	}
 
+	
 	srand((unsigned)time(NULL));
-	randomWalk(n, m);
+	randomWalk(inputArgument[0], inputArgument[1], inputArgument[2], inputArgument[3]);
 	
 	return 0;
 }
 
-void randomWalk(int n, int m)
+void randomWalk(int n, int m, int ibug, int jbug)
 {
 	const int imove[8] = {-1, 0, 1, 1, 1, 0, -1, -1},
 			  jmove[8] = {1 ,1 ,1 ,0 ,-1 ,-1 ,-1 ,0};
 	int** count = initializeCount(n, m);
-	int ibug = 0, jbug = 0, totalMoves = 0, nextMove = 0;
+	int totalMoves = 0, nextMove = 0;
 	
 	count[ibug][jbug]++;
-	for(int i = 0; i < 50000; ++i)
+	do
 	{
 		nextMove = randomSelectNextMove(ibug, jbug, n, m);
-		
+
 		ibug = ibug + imove[nextMove];
 		jbug = jbug + jmove[nextMove];
-		
+
 		++count[ibug][jbug];
 		++totalMoves;
-		if( allTileTouched(count, n, m) ) break;
-	}
+	}while( allTileTouched(count, n, m) != TRUE );
 	
 	print(count, n, m, totalMoves);
 	freeCount(count, n);
 }
 
+
 int randomSelectNextMove(const int ibug, const int jbug, const int n, const int m)
 {
-	const int nextMove[12] = {0,1,2,3,4,5,6,7,0,1,2,3};
+	static const int nextMove[12] = {0,1,2,3,4,5,6,7,0,1,2,3};
 	switch( currentPosition(ibug, jbug, n, m) )
 	{
 		case MIDDLE	: return nextMove[rand() % 8];
-		
+
 		case LEFT_WALL : return nextMove[rand() % 5 + 7];
 		case RIGHT_WALL : return nextMove[rand() % 5 + 3];
 		case UPPER_WALL : return nextMove[rand() % 5 + 1];
 		case LOWER_WALL : return nextMove[rand() % 5 + 5];
-		
+						  
 		case UPPERLEFT_CORNER : return nextMove[rand() % 3 + 1];
 		case LOWERLEFT_CORNER :	return nextMove[rand() % 3 + 7];
 		case UPPERRIGHT_CORNER : return nextMove[rand() % 3 + 3];
@@ -120,8 +153,8 @@ int	allTileTouched(int **count, const int n, const int m)
 {
 	for(int i = 0; i < n; ++i)
 		for(int j = 0; j < m; ++j)
-			if( count[i][j] == 0 ) return 0; // not all tiles was touched, return 0
-	return 1; // all tiles was touched
+			if( count[i][j] == 0 ) return FALSE; // not all tiles was touched, return 0
+	return TRUE; // all tiles was touched
 }
 
 
@@ -142,15 +175,22 @@ int** initializeCount(int n, int m)
 
 void print(int** count, int n, int m, int totalMoves)
 {
+	FILE *outputFIle = fopen("Sample_Output.txt", "w");
+	if( outputFIle == NULL )
+	{
+		fprintf(stderr, "cannot open Sample_Output.txt");
+		exit(EXIT_FAILURE);
+	}
+
 	//(1) print the total number of legal moves
-	printf("total number of legal moves : %d\n", totalMoves);
+	fprintf(outputFIle, "總共%d步\r\n\r\n", totalMoves);
 	
 	//(2) print final count array
 	for(int i = 0; i < n; ++i)
 	{
 		for(int j = 0; j < m; ++j)
-			printf("%3d ", count[i][j]);
-		printf("\n");
+			fprintf(outputFIle ,"%3d ", count[i][j]);
+		fprintf(outputFIle, "\r\n");
 	}
 }
 
