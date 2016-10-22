@@ -4,7 +4,7 @@
  *	Ch2 Aarray and Structures 
  *	p.102 #9 "random walk" problem
  *	
- *	compile option : gcc hw2.c -o test -std=c99
+ *	compile info : gcc hw2.c -o test -std=c99
  *	command line argument : ./test n(2<n<=40) m(2<m<=20) initialRow initialColumn
  */
 
@@ -21,10 +21,10 @@ enum position {	UPPERLEFT_CORNER = 1, UPPERRIGHT_CORNER = 2,
 				MIDDLE = 9 }; 
 
 
-void randomWalk				 (int, int, int, int);
-int  randomSelectNextMove	 (const int, const int, const int, const int);
-enum position currentPosition(const int, const int, const int, const int);
-int	 allTileTouched			 (int **, const int, const int);
+void randomWalk				 (int, int, int, int); 
+int  randomSelectNextMove	 (const int, const int, const int, const int); //choose next move randomly 
+enum position currentPosition(const int, const int, const int, const int); //indentify current position
+int	 allTileTouched			 (int **, const int, const int); //return TRUE if all tiles are touched at least once, else return FALSE
 
 
 int** initializeCount(int, int);
@@ -54,12 +54,12 @@ int main(int argc, char *argv[])
 		fprintf(stderr, "invalid m (Column Size)");
 		exit(EXIT_FAILURE);
 	}
-	if( inputArgument[2] < 0 || inputArgument[2] > inputArgument[0])
+	if( inputArgument[2] < 0 || inputArgument[2] >= inputArgument[0])
 	{
 		fprintf(stderr, "invalid Initial Row Position");
 		exit(EXIT_FAILURE);
 	}
-	if( inputArgument[3] < 0 || inputArgument[3] > inputArgument[1] )
+	if( inputArgument[3] < 0 || inputArgument[3] >= inputArgument[1] )
 	{
 		fprintf(stderr, "invalid Initial Column Position");
 		exit(EXIT_FAILURE);
