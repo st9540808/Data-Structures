@@ -192,6 +192,7 @@ void print(int** count, int n, int m, int totalMoves)
 			fprintf(outputFIle ,"%3d ", count[i][j]);
 		fprintf(outputFIle, "\r\n");
 	}
+	fclose(outputFIle);
 }
 
 void freeCount(int** count, int n)
