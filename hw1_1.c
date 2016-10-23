@@ -1,3 +1,12 @@
+/**
+ *	DataSturctures
+ *	hw1_1
+ *	Ch1 Basic Concept 
+ *	Factorial
+ *
+ *	compile info : gcc hw1_1.c -o test -std=c99
+ */
+
 #include <stdio.h>
 
 int recursiveFactorial(int); //recursive version of factorial

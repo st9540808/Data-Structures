@@ -1,3 +1,12 @@
+/**
+ *	DataSturctures
+ *	hw1_2
+ *	Ch1 Basic Concept 
+ *	Powerset
+ *
+ *	compile info : gcc hw1_2.c -o test -std=c99
+ */
+
 #include <stdio.h>
 
 void powerSet(char [], int); 
