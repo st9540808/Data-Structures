@@ -114,7 +114,7 @@ int randomSelectNextMove(const int ibug, const int jbug, const int n, const int 
 		case LOWERRIGHT_CORNER : return nextMove[rand() % 3 + 5];
 		
 		default : fprintf(stderr, "illegal position\n");
-					   exit(EXIT_FAILURE);
+				  exit(EXIT_FAILURE);
 	}
 }
 
@@ -149,7 +149,7 @@ enum position currentPosition(const int ibug, const int jbug, const int n, const
 	exit(EXIT_FAILURE);
 }
 
-int	allTileTouched(int **count, const int n, const int m)
+inline int allTileTouched(int **count, const int n, const int m)
 {
 	for(int i = 0; i < n; ++i)
 		for(int j = 0; j < m; ++j)
@@ -161,7 +161,7 @@ int	allTileTouched(int **count, const int n, const int m)
 int** initializeCount(int n, int m)
 {
 	int **count;
-	count = calloc(n, sizeof(int *)); //n rows
+	count = malloc(n * sizeof(int *)); //n rows
 	for(int i = 0; i < n; ++i)
 	{
 		count[i] = calloc(m , sizeof(int)); //m columns
@@ -175,24 +175,25 @@ int** initializeCount(int n, int m)
 
 void print(int** count, int n, int m, int totalMoves)
 {
-	FILE *outputFIle = fopen("Sample_Output.txt", "w");
-	if( outputFIle == NULL )
+	FILE *outputFile = fopen("Sample_Output.txt", "w");
+	if( outputFile == NULL )
 	{
 		fprintf(stderr, "cannot open Sample_Output.txt");
 		exit(EXIT_FAILURE);
 	}
 
 	//(1) print the total number of legal moves
-	fprintf(outputFIle, "總共%d步\r\n\r\n", totalMoves);
+	fprintf(outputFile, "總共%d步\r\n\r\n", totalMoves);
 	
 	//(2) print final count array
 	for(int i = 0; i < n; ++i)
 	{
 		for(int j = 0; j < m; ++j)
-			fprintf(outputFIle ,"%3d ", count[i][j]);
-		fprintf(outputFIle, "\r\n");
+			fprintf(outputFile ,"%3d ", count[i][j]);
+		fprintf(outputFile, "\r\n");
 	}
-	fclose(outputFIle);
+	
+	fclose(outputFile);
 }
 
 void freeCount(int** count, int n)
