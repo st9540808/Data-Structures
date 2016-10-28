@@ -45,7 +45,7 @@ int main()
 
 void readFile()
 {
-	int valueVar, n, a = 3, b = 3, nElement = 0; 
+	int valueVar, n, a, b, nElement = 0; 
 	
 	char inputFileName[30];
 	printf("please input the file name : ");
