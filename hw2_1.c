@@ -33,7 +33,7 @@ struct terms
 
 
 void readFile(); 
-void valueFuc(const int n, const int a, const int b, const int nElement, int e[nElement]);
+void value(const int n, const int a, const int b, const int nElement, int e[nElement]);
 
 
 int main()
@@ -45,7 +45,7 @@ int main()
 
 void readFile()
 {
-	int value, n, a = 3, b = 3, nElement = 0; 
+	int valueVar, n, a = 3, b = 3, nElement = 0; 
 	
 	char inputFileName[30];
 	printf("please input the file name : ");
@@ -67,7 +67,7 @@ void readFile()
 //		printf("\n");
 		for(int j = 0; j < n; ++j)
 		{
-			fscanf(inputFile, "%d", &value);
+			fscanf(inputFile, "%d", &valueVar);
 			if( j > i-a && j < i+b )
 			{
 				if( nElement == 0 )	{ MALLOC(matrix, 1 * sizeof(struct terms));}
@@ -75,7 +75,7 @@ void readFile()
 				
 				matrix[nElement].row = i;
 				matrix[nElement].col = j;
-				matrix[nElement].value = value;
+				matrix[nElement].value = valueVar;
 
 //				printf("%d (%d,%d) | ", matrix[nElement].value, matrix[nElement].row, matrix[nElement].col);
 				++nElement;
@@ -86,14 +86,14 @@ void readFile()
 	
 	int e[nElement];
 	for(int i = 0; i < nElement; ++i) e[i] = -1;
-	valueFuc(n, a, b, nElement, e);
+	value(n, a, b, nElement, e);
 	
 	fclose(inputFile);
 	free(matrix);
 }
 
 
-void valueFuc(const int n, const int a, const int b, const int nElement, int e[nElement])
+void value(const int n, const int a, const int b, const int nElement, int e[nElement])
 {
 	int eCurrent = 0;
 	printf("\n");	
