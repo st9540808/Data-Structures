@@ -107,7 +107,10 @@ void value(const int n, const int a, const int b, const int nElement, int e[nEle
 					if( matrix[element].row == i && matrix[element].col == j )
 					{	
 						e[eCurrent] = matrix[element].value;
-						printf("e[%2d] = %d  d(%d,%d)\n", eCurrent, matrix[element].value, matrix[element].row, matrix[element].col);
+						if( eCurrent >= 10 )
+							printf("e[%d] = %2d  d(%d,%d)\n", eCurrent, matrix[element].value, matrix[element].row, matrix[element].col);
+						else
+							printf("e[%d] = %2d   d(%d,%d)\n", eCurrent, matrix[element].value, matrix[element].row, matrix[element].col);
 						break;	
 					}
 				++eCurrent;
@@ -122,7 +125,10 @@ void value(const int n, const int a, const int b, const int nElement, int e[nEle
 			if( matrix[element].row == i && matrix[element].col == i )
 			{	
 				e[eCurrent] = matrix[element].value;
-				printf("e[%2d] = %d  d(%d,%d)\n", eCurrent, matrix[element].value, matrix[element].row, matrix[element].col);
+				if( eCurrent >= 10 )
+					printf("e[%d] = %2d  d(%d,%d)\n", eCurrent, matrix[element].value, matrix[element].row, matrix[element].col);
+				else
+					printf("e[%d] = %2d   d(%d,%d)\n", eCurrent, matrix[element].value, matrix[element].row, matrix[element].col);
 				break;	
 			}
 		++eCurrent;
@@ -138,7 +144,10 @@ void value(const int n, const int a, const int b, const int nElement, int e[nEle
 					if( matrix[element].row == i && matrix[element].col == j )
 					{	
 						e[eCurrent] = matrix[element].value;
-						printf("e[%2d] = %d  d(%d,%d)\n", eCurrent, matrix[element].value, matrix[element].row, matrix[element].col);
+						if( eCurrent >= 10 )
+							printf("e[%d] = %2d  d(%d,%d)\n", eCurrent, matrix[element].value, matrix[element].row, matrix[element].col);
+						else
+							printf("e[%d] = %2d   d(%d,%d)\n", eCurrent, matrix[element].value, matrix[element].row, matrix[element].col);
 						break;	
 					}
 				++eCurrent;
