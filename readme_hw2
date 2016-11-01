@@ -1,8 +1,10 @@
 hw2_1.c Programming Homework 1
+	function value generate array represetation of input banded matrix
 	compile info : gcc -o test hw2_1.c -std=c99
-
+	
 
 hw2_2.c Programming Homework 2
+	function randomWalk generate random walk array
 	compile info : gcc -o test hw2_2.c -std=c99
 	command line argument : ./test n(2<n<=40) m(2<m<=20) initialRow initialColumn
 	

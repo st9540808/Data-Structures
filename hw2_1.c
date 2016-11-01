@@ -24,8 +24,7 @@
 	}
 
 //Sparse Matrix Terms
-struct terms
-{
+struct terms{
 	int row;
 	int col;
 	int value;
@@ -34,7 +33,6 @@ struct terms
 
 void readFile(); 
 void value(const int n, const int a, const int b, const int nElement, int e[nElement]);
-
 
 int main()
 {
@@ -47,24 +45,27 @@ void readFile()
 {
 	int valueVar, n, a, b, nElement = 0; 
 	
-	char inputFileName[30];
+	char inputFileName[270];
 	printf("please input the file name : ");
 	scanf("%s", inputFileName);
 	FILE *inputFile = fopen(inputFileName, "r");
-	if( inputFile == NULL )
-	{
+	if( inputFile == NULL ){
 		fprintf(stderr, "cannot open Sample_Output.txt");
 		exit(EXIT_FAILURE);
 	}
 		
 	fscanf(inputFile, "%d", &n);
 	printf("a : ");
-	scanf("%d",&a);
+	scanf("%d",&a); 
+	if( a < 0 || a > n )   { fclose(inputFile); exit(EXIT_FAILURE);}
 	printf("b : ");
 	scanf("%d",&b);
+	if( b < 0 || b > n )   { fclose(inputFile); exit(EXIT_FAILURE);}
+//	if( a == 0 && b == 0 ) { fclose(inputFile); exit(EXIT_FAILURE);}
+
+	//read file into sparse matrix data structure
 	for(int i = 0; i < n; ++i)
 	{
-//		printf("\n");
 		for(int j = 0; j < n; ++j)
 		{
 			fscanf(inputFile, "%d", &valueVar);
@@ -77,16 +78,14 @@ void readFile()
 				matrix[nElement].col = j;
 				matrix[nElement].value = valueVar;
 
-//				printf("%d (%d,%d) | ", matrix[nElement].value, matrix[nElement].row, matrix[nElement].col);
 				++nElement;
 			}
 		}
 	}
-//	printf("total element : %d \n", nElement);
 	
 	int e[nElement];
 	for(int i = 0; i < nElement; ++i) e[i] = -1;
-	value(n, a, b, nElement, e);
+	value(n, a, b, nElement, e);//generate generalized matrix array representation in e
 	
 	fclose(inputFile);
 	free(matrix);
@@ -97,6 +96,8 @@ void value(const int n, const int a, const int b, const int nElement, int e[nEle
 {
 	int eCurrent = 0;
 	printf("\n");	
+	
+	//start from (a-1) diagonal below main diagonal 
 	{
 		static int iteration = 0;
 		for(int i = a-1; i > 0; i = (a-1)-iteration)
@@ -108,9 +109,9 @@ void value(const int n, const int a, const int b, const int nElement, int e[nEle
 					{	
 						e[eCurrent] = matrix[element].value;
 						if( eCurrent >= 10 )
-							printf("e[%d] = %2d  d(%d,%d)\n", eCurrent, matrix[element].value, matrix[element].row, matrix[element].col);
+							printf("e[%d] = %d  d(%d,%d)\n", eCurrent, matrix[element].value, matrix[element].row, matrix[element].col);
 						else
-							printf("e[%d] = %2d   d(%d,%d)\n", eCurrent, matrix[element].value, matrix[element].row, matrix[element].col);
+							printf("e[%d] = %d   d(%d,%d)\n", eCurrent, matrix[element].value, matrix[element].row, matrix[element].col);
 						break;	
 					}
 				++eCurrent;
@@ -119,6 +120,7 @@ void value(const int n, const int a, const int b, const int nElement, int e[nEle
 		}
 	}
 	
+	//main diagonal
 	for(int i = 0; i < n; ++i)
     {
 		for(int element = 0; element < nElement; ++element)
@@ -126,14 +128,16 @@ void value(const int n, const int a, const int b, const int nElement, int e[nEle
 			{	
 				e[eCurrent] = matrix[element].value;
 				if( eCurrent >= 10 )
-					printf("e[%d] = %2d  d(%d,%d)\n", eCurrent, matrix[element].value, matrix[element].row, matrix[element].col);
+					printf("e[%d] = %d  d(%d,%d)\n", eCurrent, matrix[element].value, matrix[element].row, matrix[element].col);
 				else
-					printf("e[%d] = %2d   d(%d,%d)\n", eCurrent, matrix[element].value, matrix[element].row, matrix[element].col);
+					printf("e[%d] = %d   d(%d,%d)\n", eCurrent, matrix[element].value, matrix[element].row, matrix[element].col);
 				break;	
 			}
 		++eCurrent;
 	}
 	
+
+	// (b-1) diagonal above main diagonal
 	{
 		static int iteration = 0;
 		for(int j = 1; j < b ; j = 1+iteration)
@@ -145,9 +149,9 @@ void value(const int n, const int a, const int b, const int nElement, int e[nEle
 					{	
 						e[eCurrent] = matrix[element].value;
 						if( eCurrent >= 10 )
-							printf("e[%d] = %2d  d(%d,%d)\n", eCurrent, matrix[element].value, matrix[element].row, matrix[element].col);
+							printf("e[%d] = %d  d(%d,%d)\n", eCurrent, matrix[element].value, matrix[element].row, matrix[element].col);
 						else
-							printf("e[%d] = %2d   d(%d,%d)\n", eCurrent, matrix[element].value, matrix[element].row, matrix[element].col);
+							printf("e[%d] = %d   d(%d,%d)\n", eCurrent, matrix[element].value, matrix[element].row, matrix[element].col);
 						break;	
 					}
 				++eCurrent;
