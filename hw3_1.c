@@ -4,6 +4,9 @@
  *	Ch3 Stacks And Queues 
  *	p.120 A "mazing" problem
  *	
+ *	the program print out all possible solution path (using depth first search)
+ *	but doesn't guarantee to be the shortest path
+ *
  *	compile info : gcc hw3_1.c -o test -std=c99
  */
  
@@ -11,34 +14,52 @@
 #include <stdlib.h>
 #define TRUE  1
 #define FALSE 0
-
-typedef struct {
-	short int row;
-	short int col;
-	short int direction;
-} element;
-
+#define MAX_STACK_SIZE 30
 typedef struct{
-	short int vertical;
-	short int horizontal;
+	int vert;
+	int horiz;
 } offsets;
 
 const offsets move[8] = {
-	{-1, 0},//N
-	{-1, 1},//NE
-	{ 0, 1},//E
-	{ 1, 1},//SE
-	{ 1, 0},//S
-	{ 1,-1},//SW
-	{ 0,-1},//W
-	{-1,-1},//NW
+	{-1, 0}, //0 N
+	{-1, 1}, //1 NE
+	{ 0, 1}, //2 E
+	{ 1, 1}, //3 SE
+	{ 1, 0}, //4 S
+	{ 1,-1}, //5 SW
+	{ 0,-1}, //6 W
+	{-1,-1}, //7 NW
 };
 
 
+//stack
+typedef struct {
+	int row;
+	int col;
+	int dir;
+} element;
+element stack[MAX_STACK_SIZE];
+int top = -1;
+
+//stack function
+void push(element item);
+element pop();
+void stackFull();
+element stackEmpty();
+
+
 void solveMaze();
-void readIn(int *n, int *m, int *startRow, int *startCol, int *desRow, int *desCol);
-void getPosition(FILE *input, char target, int *row, int *col);
-void checkValidPosition(FILE *input, int n, int m, int row, int col, char name[]);//assume s & d in not in the middle of maze
+void findPath(char **maze, char **mark, int n, int m, int startRow, int startCol, int desRow, int desCol);
+
+void recordSolutionPath(FILE* output, char **maze, int n, int m);
+void readIn(int *n, int *m); //get n m size
+void getPosition(char **maze, int n, int m, char target, int *row, int *col); //get start & destination postition
+char** initializeMaze(int n, int m); //initialize maze array
+char** initializeMark(int n, int m);
+
+
+void printOut(char **array, int n, int m);
+
 
 int main()
 {
@@ -46,26 +67,168 @@ int main()
 	return 0;
 }
 
-void solveMaze()
+
+
+//stack function
+void push(element item)
 {
-	int n = 0, m = 0,
-		startRow, startCol,//start position
-		desRow, desCol;//destination position
-	readIn(&n,  &m);
-	char **maze = initializeMaze(n+2, m+2);
-	for(int i = 0; i < n+2; ++i)
-	{
-		for(int j = 0; j < m+2; ++j)
-			printf("%d ",maze[i][j]);
-		printf("\n");
-	}
+	if( top >= MAX_STACK_SIZE )
+		stackFull();
+	stack[++top] = item;
+}
 
+element pop()
+{
+	if( top == -1 )
+		return stackEmpty();
+	return stack[top--];
+}
 
+void stackFull()
+{
+	fprintf(stderr, "stack is full\n");
+	exit(EXIT_FAILURE);
+}
+
+element stackEmpty()
+{
+	element error = {-1, -1, -1};
+	fprintf(stderr, "stack is empty\n");
+	return error;
 }
 
 
+//Maze solving function
+void solveMaze()
+{
+	FILE* output = fopen("out.txt", "w");
+	if( output == NULL ){
+		fprintf(stderr, "cannot open out.txt");
+		exit(EXIT_FAILURE);
+	}
 
-void readIn(int *n, int *m, int *startRow, int *startCol, int *desRow, int *desCol)
+	int n = 0, m = 0,
+		startRow, startCol, //start position
+		desRow, desCol; //destination position
+	
+	//initialize all varible
+	readIn(&n, &m);
+	n = n + 2; m = m + 2;
+	char **maze = initializeMaze(n, m),
+		 **mark = initializeMark(n, m);
+	getPosition(maze, n, m, 's', &startRow, &startCol);
+	getPosition(maze, n, m, 'd', &desRow, &desCol);
+	
+	
+	//initialize to the start position
+	element position = {startRow, startCol, -1};
+	push(position);
+	mark[position.row][position.col] = '1';
+
+
+	//find all possible route
+	while(1)
+	{	
+		static int steps = 0, noRoute = TRUE;
+		
+		findPath(maze, mark, n, m, startRow, startCol, desRow, desCol);	
+		if( top != -1 )
+		{
+			for(int i = 1; i <= top; ++i)
+			{	
+				maze[ stack[i].row ][ stack[i].col ] = '*';
+				++steps;
+			}
+			//store solution path
+			recordSolutionPath(output, maze, n, m);
+			fprintf(output, "steps : %d\r\n\r\n", steps+1);
+			
+			for(int i = 1; i <= top; ++i)
+				maze[ stack[i].row ][ stack[i].col ] = '0';
+			steps = 0;
+			noRoute = FALSE;
+		}
+		else if( noRoute == TRUE )
+		{
+			fprintf(output ,"No route");
+			break;
+		}
+		else
+			break;
+	}
+
+
+	//
+	printOut(maze, n, m);
+	printOut(mark, n ,m);
+	printf("%d,%d\n%d,%d", startRow, startCol, desRow, desCol);
+	//
+	
+	
+	fclose(output);
+	for(int i = 0; i < n; ++i) 
+	{
+		free(maze[i]);  
+		free(mark[i]);
+	}
+	free(maze);
+	free(mark);
+}
+
+void findPath(char **maze, char **mark, int n, int m, int startRow, int startCol, int desRow, int desCol)
+{
+	int curRow, curCol, nextRow, nextCol, dir, pathFound = FALSE;
+	while( top != -1 && pathFound != TRUE )
+	{
+		element position = pop();
+		curRow = position.row; curCol = position.col; dir = position.dir + 1;
+		while( dir <= 7 && pathFound != TRUE )
+		{
+			for(int i = 0; i < MAX_STACK_SIZE; ++i)//
+				if( i <= top )//
+					printf("(%d,%d)", stack[i].row, stack[i].col);//
+			printf("\n");//
+			
+			nextRow = curRow + move[dir].vert;
+			nextCol = curCol + move[dir].horiz;
+			if( nextRow == desRow && nextCol == desCol )
+			{
+				position.row = curRow; position.col = curCol; position.dir = dir;
+				push(position);
+				pathFound = TRUE;
+				break;
+			}
+			else if( maze[nextRow][nextCol] != '1' && mark[nextRow][nextCol] != '1' )
+			{
+				printOut(mark, n, m);//
+				printf("\n");//
+				mark[nextRow][nextCol] = '1';
+				position.row = curRow; position.col = curCol; position.dir = dir;//save current position
+				push(position);
+				curRow = nextRow; curCol = nextCol; dir = 0;
+			}
+			else
+				++dir;
+		}
+		if( pathFound != TRUE )
+			mark[curRow][curCol] = '0';
+		printf("\n");//
+	}
+}
+
+void recordSolutionPath(FILE* output, char **maze, int n, int m)
+{
+	fseek(output, 0L, SEEK_END);
+	for(int i = 1; i < n-1; ++i)
+	{
+		for(int j = 1; j < m-1; ++j)
+			fprintf(output, "%c",maze[i][j]);
+		fprintf(output, "\r\n");
+	}
+}
+
+
+void readIn(int *n, int *m)
 {
 	FILE *input = fopen("in.txt", "r");
 	if( input == NULL ){
@@ -89,52 +252,20 @@ void readIn(int *n, int *m, int *startRow, int *startCol, int *desRow, int *desC
 			++*n;
 	++*n;
 	
-	//get s position
-	getPosition(input, 's', startRow, startCol);
-//	checkValidPosition(input, *n, *m, *startRow, *startCol, "start");
-	
-
-	//get d position
-	getPosition(input, 'd', desRow, desCol);
-//	checkValidPosition(input, *n, *m, *desRow, *desCol, "destination");
-	
-	
 	fclose(input);
 }
 
-void getPosition(FILE *input, char target, int *row, int *col)
+void getPosition(char **maze, int n, int m, char target, int *row, int *col)
 {
-	rewind(input);
-	char temp;
-	while( fscanf(input, "%c", &temp) != EOF )
-	{
-		static int i = 0, j = 0;
-		if( temp == target )
-		{
-			*row = i;
-			*col = j;
-			break;
-		}
-		else if( temp == '\r' )//when reach to a carriage return, advance to next row
-		{
-			++i;
-			j = 0;
-		}
-		else if( temp != '\n' )
-			++j;
-	}
+	for(int i = 1; i < n-1; ++i)
+		for(int j = 1; j < m-1; ++j)
+			if( maze[i][j] == target )
+			{
+				*row = i;
+				*col = j;
+				return;
+			}
 }
-
-void checkValidPosition(FILE *input, int n, int m, int row, int col, char name[])
-{
-	if( (row < n-1 && row > 0) && (col < m-1 && col > 0) )
-	{
-		fprintf(stderr, "error %s position\n", name);
-		fclose(input);
-		exit(EXIT_FAILURE);
-	}
-}
-
 
 char** initializeMaze(int n, int m)
 {
@@ -144,17 +275,65 @@ char** initializeMaze(int n, int m)
 		exit(EXIT_FAILURE);
 	}
 	
-	char **maze;
-	count = malloc(n * sizeof(char *)); //n rows
+	char **maze, temp;
+	maze = malloc(n * sizeof(char *)); //n rows
 	for(int i = 0; i < n; ++i)
 	{
-		maze[i] = calloc(m , sizeof(char)); //m columns
-		if(count[i] == NULL){
+		maze[i] = malloc(m * sizeof(char)); //m columns
+		if(maze[i] == NULL){
 			fprintf(stderr, "out of memory\n");
 			exit(EXIT_FAILURE);
 		}
 	}	
 	
+	for(int i = 0; i < n; ++i)
+		for(int j = 0; j < m; ++j)
+		{	
+			if( !(i < n-1 && i > 0) || !(j < m-1 && j > 0) )//create boundary
+				maze[i][j] = '1';
+			else
+			{
+				do
+				{
+					fscanf(input, "%c", &temp);
+					maze[i][j] = temp;
+				}while( temp == '\n' || temp == '\r' );
+			}
+		}
 	fclose(input);
 	return maze;
+}
+
+char** initializeMark(int n, int m)
+{
+	char **mark, temp;
+	mark = malloc(n * sizeof(char *)); //n rows
+	for(int i = 0; i < n; ++i)
+	{
+		mark[i] = malloc(m * sizeof(char)); //m columns
+		if(mark[i] == NULL){
+			fprintf(stderr, "out of memory\n");
+			exit(EXIT_FAILURE);
+		}
+	}	
+	
+	for(int i = 0; i < n; ++i)
+		for(int j = 0 ; j < m; ++j)
+			if( !(i < n-1 && i > 0) || !(j < m-1 && j > 0) )//create boundary
+				mark[i][j] = '1';
+			else
+				mark[i][j] = '0';
+	return mark;
+}
+
+
+
+void printOut(char **array, int n, int m)
+{
+	for(int i = 0; i < n; ++i)
+	{
+		for(int j = 0; j < m; ++j)
+			printf("%c ",array[i][j]);
+		printf("\n");
+	}
 }
