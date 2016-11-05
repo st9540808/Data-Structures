@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #define TRUE  1
 #define FALSE 0
-#define MAX_STACK_SIZE 30
+#define MAX_STACK_SIZE 300
 typedef struct{
 	int vert;
 	int horiz;
@@ -157,14 +157,6 @@ void solveMaze()
 			break;
 	}
 
-
-	//
-	printOut(maze, n, m);
-	printOut(mark, n ,m);
-	printf("%d,%d\n%d,%d", startRow, startCol, desRow, desCol);
-	//
-	
-	
 	fclose(output);
 	for(int i = 0; i < n; ++i) 
 	{
@@ -184,11 +176,6 @@ void findPath(char **maze, char **mark, int n, int m, int startRow, int startCol
 		curRow = position.row; curCol = position.col; dir = position.dir + 1;
 		while( dir <= 7 && pathFound != TRUE )
 		{
-			for(int i = 0; i < MAX_STACK_SIZE; ++i)//
-				if( i <= top )//
-					printf("(%d,%d)", stack[i].row, stack[i].col);//
-			printf("\n");//
-			
 			nextRow = curRow + move[dir].vert;
 			nextCol = curCol + move[dir].horiz;
 			if( nextRow == desRow && nextCol == desCol )
@@ -200,8 +187,6 @@ void findPath(char **maze, char **mark, int n, int m, int startRow, int startCol
 			}
 			else if( maze[nextRow][nextCol] != '1' && mark[nextRow][nextCol] != '1' )
 			{
-				printOut(mark, n, m);//
-				printf("\n");//
 				mark[nextRow][nextCol] = '1';
 				position.row = curRow; position.col = curCol; position.dir = dir;//save current position
 				push(position);
@@ -212,7 +197,6 @@ void findPath(char **maze, char **mark, int n, int m, int startRow, int startCol
 		}
 		if( pathFound != TRUE )
 			mark[curRow][curCol] = '0';
-		printf("\n");//
 	}
 }
 
