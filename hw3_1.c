@@ -6,6 +6,7 @@
  *	
  *	the program print out all possible solution path (using depth first search)
  *	but doesn't guarantee to be the shortest path
+ *	and it dose not choose a previously stepped position
  *
  *	compile info : gcc hw3_1.c -o test -std=c99
  */
@@ -48,8 +49,8 @@ void stackFull();
 element stackEmpty();
 
 
-void solveMaze();
-void findPath(char **maze, char **mark, int n, int m, int startRow, int startCol, int desRow, int desCol);
+void solveMaze(); //give all possible solution path
+void findPath(char **, char **, int, int, int, int, int, int); //find a single solution path
 
 void recordSolutionPath(FILE* output, char **maze, int n, int m);
 void readIn(int *n, int *m); //get n m size
@@ -125,7 +126,6 @@ void solveMaze()
 	push(position);
 	mark[position.row][position.col] = '1';
 
-
 	//find all possible route
 	while(1)
 	{	
@@ -139,16 +139,18 @@ void solveMaze()
 				maze[ stack[i].row ][ stack[i].col ] = '*';
 				++steps;
 			}
+			
 			//store solution path
 			recordSolutionPath(output, maze, n, m);
 			fprintf(output, "steps : %d\r\n\r\n", steps+1);
 			
+			//Re-initialize
 			for(int i = 1; i <= top; ++i)
 				maze[ stack[i].row ][ stack[i].col ] = '0';
 			steps = 0;
 			noRoute = FALSE;
 		}
-		else if( noRoute == TRUE )
+		else if( noRoute == TRUE ) //no solution path found
 		{
 			fprintf(output ,"No route");
 			break;
@@ -202,7 +204,7 @@ void findPath(char **maze, char **mark, int n, int m, int startRow, int startCol
 
 void recordSolutionPath(FILE* output, char **maze, int n, int m)
 {
-	fseek(output, 0L, SEEK_END);
+//	fseek(output, 0L, SEEK_END);
 	for(int i = 1; i < n-1; ++i)
 	{
 		for(int j = 1; j < m-1; ++j)
