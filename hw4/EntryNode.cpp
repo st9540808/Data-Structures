@@ -11,3 +11,13 @@ int EntryNode::getValue() const
 {
 	return value;
 }
+
+int EntryNode::getRow() const
+{
+	return row;
+}
+
+int EntryNode::getCol() const
+{
+	return col;
+}

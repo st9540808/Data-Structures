@@ -4,21 +4,26 @@
 
 #include <iostream>
 #include <vector>
+#include <iomanip>
 #include "EntryNode.h"
+using namespace std;
+
 
 class SparseMatrix
 {
-	public:
-		SparseMatrix();
-		~SparseMatrix();
-		void inputMatrix();	//input row & col first, then input matrix
-		void print() const;	//print out SparseMatrix
+public:
+	SparseMatrix();
+	~SparseMatrix();
+	void inputMatrix();	//input row & col first, then input matrix
+	void print() const;	//print out SparseMatrix
 
-	private:
-		std::vector< EntryNode * > rowHead;
-		std::vector< EntryNode * > colHead;
-		
-		void insertNode( int &value, int row, int col );
+	friend ostream &operator<<( ostream &output, const SparseMatrix & );
+
+private:
+	vector< EntryNode * > rowHead;
+	vector< EntryNode * > colHead;
+	
+	void insertNode( int &value, int row, int col );
 };
 
 #endif

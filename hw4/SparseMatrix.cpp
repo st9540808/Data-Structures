@@ -85,11 +85,40 @@ void SparseMatrix::print() const
 	{
 		EntryNode *currentPtr = rowHead.at( i );
 
-		while( currentPtr != NULL )
+		while ( currentPtr != NULL )
 		{
 			cout << currentPtr->value << " ";
 			currentPtr = currentPtr->right;
 		}
 		cout << "\n";
+	}
+}
+
+
+ostream &operator<<( ostream &output, const SparseMatrix &matrix )
+{
+	for ( int i = 0; i < matrix.rowHead.size(); ++i )
+	{
+		EntryNode *currentPtr = matrix.rowHead.at( i );
+		
+/*		
+		for ( int j = 0; j < matrix.colHead.size(); ++j )
+		{
+			if ( currentPtr == NULL )
+				output << "0 ";
+			else
+			{
+				while ( currentPtr->col != j )
+					currentPtr = currentPtr->right;
+				output << currentPtr->value << " ";
+			}
+		}
+*/		
+		while ( currentPtr != NULL )
+		{
+			output << currentPtr->value << " ";
+			currentPtr = currentPtr->right;
+		}
+		output << "\n";
 	}
 }
