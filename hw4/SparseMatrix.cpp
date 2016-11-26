@@ -1,4 +1,4 @@
-//SparseMatrix Definition
+// SparseMatrix Definition
 
 #include <iostream>
 #include "SparseMatrix.h"
@@ -49,11 +49,51 @@ void SparseMatrix::print() const
 	}
 }
 
-const SparseMatrix &SparseMatrix::operator=( const SparseMatrix & right )
+void SparseMatrix::transpose()
+{
+/*
+	int row = 0, col;
+	for ( EntryNode* const rowHeadItr : rowHead )
+	{
+		col = 0;
+		for ( EntryNode* const colHeadItr : matrix.colHead )
+		{	
+			if ( row != col ) // locate element(row,col)
+			{
+				EntryNode *currentPtr = rowHeadItr;
+			              *currentPtr_T = colHeadItr; // Tranpose target
+				for ( int traverse = 0; traverse <= col; ++traverse )
+				{
+					if( currentPtr != NULL && currentPtr->col == k )
+					{	
+						a_ik = currentPtr->value;
+						break;
+					}
+					else if ( currentPtr != NULL )
+						currentPtr = currentPtr->right;
+					else
+						break;
+			
+				}
+			}
+			++col;
+		}
+		++row;
+	}
+*/
+	vector< EntryNode * > newRowHead = colHead;
+	vector< EntryNode * > newColHead = rowHead;
+	
+
+	
+}
+
+
+const SparseMatrix &SparseMatrix::operator=( const SparseMatrix& right )
 {
 	if ( &right != this )
 	{
-		//clear the maxtrix to be assigned
+		// clear the maxtrix to be assigned
 		for ( int i = 0; i < colHead.size(); ++i )
 			if ( colHead.at( i ) != NULL )
 			{
@@ -69,13 +109,13 @@ const SparseMatrix &SparseMatrix::operator=( const SparseMatrix & right )
 			}
 		rowHead.clear(); colHead.clear();
 
-		//assign the matrix
+		// assign the matrix
 		rowHead.resize( right.rowHead.size() );
 		colHead.resize( right.colHead.size() );
 
 		for ( int i = 0; i < colHead.size(); ++i )
 		{
-			//traverse the list in col(i)
+			// traverse the list in col(i)
 			EntryNode *currentPtr = right.colHead.at( i );
 			while ( currentPtr != NULL )
 			{
@@ -92,6 +132,71 @@ const SparseMatrix &SparseMatrix::operator=( const SparseMatrix & right )
 	}
 	return *this;
 }
+
+const SparseMatrix SparseMatrix::operator*( const SparseMatrix& matrix )
+{
+	SparseMatrix outputMatrix;
+	if ( colHead.size() != matrix.rowHead.size() ) // if can't multiply
+	{
+		cout << colHead.size() << matrix.rowHead.size();
+		return outputMatrix; // output a empty Sparse matrix
+	}
+	
+	outputMatrix.rowHead.resize( rowHead.size() );
+	outputMatrix.colHead.resize( matrix.colHead.size() );
+	
+	int row = 0, col;
+	for ( EntryNode* const rowHeadItr : rowHead )
+	{
+		col = 0;
+		for ( EntryNode* const colHeadItr : matrix.colHead )
+		{
+			int product = 0; // the value of product is the element c(i,j)
+			for ( int k = 0; k < colHead.size(); ++k )
+			{
+				EntryNode *curRowPtr = rowHeadItr,
+				          *curColPtr = colHeadItr;
+				
+				// search for a(i,k) entry
+				int a_ik = 0;
+				for ( int traverse = 0; traverse <= k; ++traverse )
+				{
+					if( curRowPtr != NULL && curRowPtr->col == k )
+					{	
+						a_ik = curRowPtr->value;
+						break;
+					}
+					else if ( curRowPtr != NULL )
+						curRowPtr = curRowPtr->right;
+					else
+						break;
+				}
+			
+				// search for b(k,j) entry
+				int b_kj = 0;
+				for ( int traverse = 0; traverse <= k; ++traverse )
+				{
+					if ( curColPtr != NULL && curColPtr->row == k )
+					{	
+						b_kj = curColPtr->value;
+						break;
+					}
+					else if ( curColPtr != NULL )
+						curColPtr = curColPtr->down;
+					else
+						break;
+				}
+				product += a_ik*b_kj;	
+			}
+			if ( product != 0 )
+				outputMatrix.insertNode( product, row, col );
+			++col;
+		}
+		++row;
+	}
+	return outputMatrix;
+}
+
 
 istream &operator>>( istream &input, SparseMatrix &matrix )
 {
@@ -145,7 +250,7 @@ void SparseMatrix::insertNode( int &value, int row, int col )
 {
 	EntryNode *newPtr = new EntryNode( value, row, col );
 
-	//connect with col head list
+	// connect with col head list
 	if ( colHead.at( col ) == NULL )
 		colHead.at( col ) = newPtr;
 	else
@@ -157,7 +262,7 @@ void SparseMatrix::insertNode( int &value, int row, int col )
 		tempPtr->down = newPtr;
 	}
 
-	//connect with row head list
+	// connect with row head list
 	if ( rowHead.at( row ) == NULL )
 		rowHead.at( row ) = newPtr;
 	else
