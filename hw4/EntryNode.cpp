@@ -7,17 +7,3 @@ EntryNode::EntryNode( const int &inputValue, const int &inputRow, const int &inp
 
 }
 
-int EntryNode::getValue() const
-{
-	return value;
-}
-
-int EntryNode::getRow() const
-{
-	return row;
-}
-
-int EntryNode::getCol() const
-{
-	return col;
-}

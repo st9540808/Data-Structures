@@ -1,1 +1,1 @@
-vim -p SparseMatrix.h SparseMatrix.cpp main.cpp EntryNode.h EntryNode.cpp 
+vim -p SparseMatrix.h SparseMatrix.cpp main.cpp

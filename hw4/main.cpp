@@ -2,13 +2,17 @@
 
 #include <iostream>
 #include "SparseMatrix.h"
+using namespace std;
 
 int main()
 {
-	SparseMatrix matrix1;
-	matrix1.inputMatrix();
+	SparseMatrix matrix_1, matrix_2;
 
-	std::cout << matrix1;
+	cin >> matrix_1;
+	cout << matrix_1;
+	cin >> matrix_2;
 
+	matrix_1 = matrix_2;
+	cout << matrix_1;
 	return 0;
 }

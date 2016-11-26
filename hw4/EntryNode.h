@@ -11,9 +11,6 @@ class EntryNode
 	
 public:
 	EntryNode( const int &, const int &, const int & );
-	int getValue() const;
-	int getRow() const;
-	int getCol() const;
 
 private:
 	int row;
@@ -22,6 +19,5 @@ private:
 	EntryNode *down; //next node in the direction down
 	EntryNode *right;//next node in the direction right
 };
-
 
 #endif
