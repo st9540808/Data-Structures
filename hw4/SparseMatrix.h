@@ -27,7 +27,8 @@ public:
 private:
 	vector< EntryNode * > rowHead;
 	vector< EntryNode * > colHead;
-	void insertNode( int &value, int row, int col );
+	void insertNode   ( const int &, const int &, const int & ); // add a node to the end of the list
+	void transposeNode( EntryNode * , vector< EntryNode * > &, vector< EntryNode * > & );
 	
 	class EntryNode
 	{

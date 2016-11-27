@@ -18,12 +18,10 @@ SparseMatrix::EntryNode::EntryNode( const int &inputValue, const int &inputRow, 
 
 SparseMatrix::~SparseMatrix()
 {
-	for ( int i = 0; i < colHead.size(); ++i )
-		if ( colHead.at( i ) != NULL )
+	for ( const EntryNode *currentPtr : colHead )
+		if ( currentPtr != NULL )
 		{
-			EntryNode *currentPtr = colHead.at( i );
-			EntryNode *tempPtr;
-
+			const EntryNode *tempPtr;
 			while ( currentPtr != NULL )
 			{
 				tempPtr = currentPtr;
@@ -51,41 +49,53 @@ void SparseMatrix::print() const
 
 void SparseMatrix::transpose()
 {
-/*
+
+	vector< EntryNode * > newRowHead( colHead.size(), NULL );
+	vector< EntryNode * > newColHead( rowHead.size(), NULL );
+
 	int row = 0, col;
 	for ( EntryNode* const rowHeadItr : rowHead )
 	{
 		col = 0;
-		for ( EntryNode* const colHeadItr : matrix.colHead )
+		for ( EntryNode* const colHeadItr : colHead )
 		{	
-			if ( row != col ) // locate element(row,col)
+			// locate element(row,col)	
+			EntryNode *currentPtr = rowHeadItr; int value = 0;
+			for ( int traverse = 0; traverse <= col; ++traverse )
 			{
-				EntryNode *currentPtr = rowHeadItr;
-			              *currentPtr_T = colHeadItr; // Tranpose target
-				for ( int traverse = 0; traverse <= col; ++traverse )
-				{
-					if( currentPtr != NULL && currentPtr->col == k )
-					{	
-						a_ik = currentPtr->value;
-						break;
-					}
-					else if ( currentPtr != NULL )
-						currentPtr = currentPtr->right;
-					else
-						break;
-			
+				if ( currentPtr != NULL && currentPtr->col == col )
+				{	
+					value = currentPtr->value;
+					break;
 				}
+				else if ( currentPtr != NULL )
+					currentPtr = currentPtr->right;
+				else
+					break;
 			}
-			++col;
+			
+			if ( value != 0 )
+				transposeNode( currentPtr, newRowHead, newColHead );
+			++col; 
 		}
 		++row;
 	}
-*/
-	vector< EntryNode * > newRowHead = colHead;
-	vector< EntryNode * > newColHead = rowHead;
 	
+	for ( const EntryNode *currentPtr : colHead )
+		if ( currentPtr != NULL )
+		{
+			const EntryNode *tempPtr;
+			while ( currentPtr != NULL )
+			{
+				tempPtr = currentPtr;
+				currentPtr = currentPtr->down;
+				delete tempPtr;
+			}
+		}
 
-	
+	colHead.clear(); rowHead.clear();
+	rowHead = newRowHead;
+	colHead = newColHead;
 }
 
 
@@ -127,18 +137,16 @@ const SparseMatrix &SparseMatrix::operator=( const SparseMatrix& right )
 				currentPtr = currentPtr->down;
 			}
 		}
-
-
 	}
 	return *this;
 }
 
-const SparseMatrix SparseMatrix::operator*( const SparseMatrix& matrix )
+const SparseMatrix SparseMatrix::operator*( const SparseMatrix &matrix )
 {
 	SparseMatrix outputMatrix;
 	if ( colHead.size() != matrix.rowHead.size() ) // if can't multiply
 	{
-		cout << colHead.size() << matrix.rowHead.size();
+		cout << "matries can't multiply ( return a empty Sparse Matrix )\n";
 		return outputMatrix; // output a empty Sparse matrix
 	}
 	
@@ -161,7 +169,7 @@ const SparseMatrix SparseMatrix::operator*( const SparseMatrix& matrix )
 				int a_ik = 0;
 				for ( int traverse = 0; traverse <= k; ++traverse )
 				{
-					if( curRowPtr != NULL && curRowPtr->col == k )
+					if ( curRowPtr != NULL && curRowPtr->col == k )
 					{	
 						a_ik = curRowPtr->value;
 						break;
@@ -225,19 +233,19 @@ ostream &operator<<( ostream &output, const SparseMatrix &matrix )
 		{
 			SparseMatrix::EntryNode *currentPtr = matrix.rowHead.at( i );
 			
-			int curTraversal = 0, notFound = true;
+			int curTraversal = 0; bool notFound = true;
 			while ( curTraversal <= j && currentPtr != NULL ) 
 			{
 				if ( currentPtr->col == j )
 				{
-					output << currentPtr->value << " ";
+					output << setw(4) << currentPtr->value;
 					notFound = false;
 					break;
 				}
 				currentPtr = currentPtr->right;
 			}
 			if ( notFound )
-				output << "0 ";
+				output << setw(4) << "0";
 		
 		}
 		output << "\n";
@@ -246,7 +254,7 @@ ostream &operator<<( ostream &output, const SparseMatrix &matrix )
 }
 
 
-void SparseMatrix::insertNode( int &value, int row, int col )
+void SparseMatrix::insertNode( const int &value, const int &row, const int &col )
 {
 	EntryNode *newPtr = new EntryNode( value, row, col );
 
@@ -273,4 +281,33 @@ void SparseMatrix::insertNode( int &value, int row, int col )
 			tempPtr = tempPtr->right;
 		tempPtr->right = newPtr;
 	}
+}
+
+void SparseMatrix::transposeNode( EntryNode *transTargetPtr, vector< EntryNode * > &newRowHead, vector< EntryNode * > &newColHead )
+{
+	EntryNode *newPtr = new EntryNode( transTargetPtr->value, transTargetPtr->col, transTargetPtr->row );
+	
+	// connect with NEW col head list
+	if ( newColHead.at( transTargetPtr->row ) == NULL )
+		newColHead.at( transTargetPtr->row ) = newPtr;
+	else
+	{
+		EntryNode *tempPtr = newColHead.at( transTargetPtr->row );
+
+		while ( tempPtr->down != NULL )
+			tempPtr = tempPtr->down;
+		tempPtr->down = newPtr;
+	}
+
+	// connect with NEW row head list
+	if ( newRowHead.at( transTargetPtr->col ) == NULL )
+		newRowHead.at( transTargetPtr->col ) = newPtr;
+	else
+	{
+		EntryNode *tempPtr = newRowHead.at( transTargetPtr->col );
+
+		while ( tempPtr->right != NULL )
+			tempPtr = tempPtr->right;
+		tempPtr->right = newPtr;
+	}	
 }
