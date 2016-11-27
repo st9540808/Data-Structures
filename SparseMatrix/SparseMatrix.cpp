@@ -1,4 +1,4 @@
-// SparseMatrix Definition
+// SparseMatrix implementation
 
 #include <iostream>
 #include "SparseMatrix.h"
@@ -31,22 +31,7 @@ SparseMatrix::~SparseMatrix()
 		}
 }
 
-
-void SparseMatrix::print() const
-{
-	for ( int i = 0; i < rowHead.size(); ++i )
-	{
-		EntryNode *currentPtr = rowHead.at( i );
-
-		while ( currentPtr != NULL )
-		{
-			cout << currentPtr->value << "("<< currentPtr->row << "," << currentPtr->col << ") ";
-			currentPtr = currentPtr->right;
-		}
-		cout << "\n";
-	}
-}
-
+// used in hw2.cpp
 const SparseMatrix &SparseMatrix::transpose()
 {
 	vector< EntryNode * > newRowHead( colHead.size(), NULL );
@@ -142,6 +127,7 @@ const SparseMatrix &SparseMatrix::operator=( const SparseMatrix& right )
 	return *this;
 }
 
+// used in hw1.cpp
 const SparseMatrix SparseMatrix::operator*( const SparseMatrix &matrix )
 {
 	SparseMatrix outputMatrix;

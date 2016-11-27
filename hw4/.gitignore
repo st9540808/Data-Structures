@@ -1,5 +1,0 @@
-*
-test.cpp
-!*.cpp
-!*.h
-!Makefile
