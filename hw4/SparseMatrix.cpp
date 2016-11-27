@@ -47,9 +47,8 @@ void SparseMatrix::print() const
 	}
 }
 
-void SparseMatrix::transpose()
+const SparseMatrix &SparseMatrix::transpose()
 {
-
 	vector< EntryNode * > newRowHead( colHead.size(), NULL );
 	vector< EntryNode * > newColHead( rowHead.size(), NULL );
 
@@ -96,6 +95,8 @@ void SparseMatrix::transpose()
 	colHead.clear(); rowHead.clear();
 	rowHead = newRowHead;
 	colHead = newColHead;
+	
+	return *this;
 }
 
 

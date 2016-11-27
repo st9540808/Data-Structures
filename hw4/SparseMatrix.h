@@ -18,8 +18,8 @@ class SparseMatrix
 public:
 	SparseMatrix();
 	~SparseMatrix();
-	void print() const;	// print out SparseMatrix ( without "0" entries )
-	void transpose();
+	void print() const;	// print out Sparse Matrix ( without "0" entries )
+	const SparseMatrix &transpose(); // tranpose a Sparse Matrix 
 
 	const SparseMatrix &operator=( const SparseMatrix & );		
 	const SparseMatrix  operator*( const SparseMatrix & ); // matrix multiplication
