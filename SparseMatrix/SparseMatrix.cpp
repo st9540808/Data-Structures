@@ -196,7 +196,7 @@ const SparseMatrix SparseMatrix::operator*( const SparseMatrix &matrix )
 istream &operator>>( istream &input, SparseMatrix &matrix )
 {
 	int maxRow, maxCol;
-	cin >> maxRow >> maxCol;
+	input >> maxRow >> maxCol;
 
 	matrix.rowHead.resize( maxRow, NULL );
 	matrix.colHead.resize( maxCol, NULL );
@@ -205,7 +205,7 @@ istream &operator>>( istream &input, SparseMatrix &matrix )
 		for ( int j = 0; j < matrix.colHead.size(); ++j )
 		{
 			int inputValue;
-			cin >> inputValue;
+			input >> inputValue;
 			
 			if ( inputValue != 0 )
 				matrix.insertNode( inputValue, i, j );
