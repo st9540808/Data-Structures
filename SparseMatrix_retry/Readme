@@ -1,0 +1,47 @@
+Data Structure Assignment 4
+
+#Programming Homework1 :
+	main is written in hw1.cpp
+
+	compile :
+		g++ -c SparseMatrix.cpp -std=gnu++14
+		g++ -c hw1.cpp -std=gnu++14
+		g++ -o hw1 hw1.o SparseMatrix.o -std=gnu++14
+
+	input :
+		use input.in to redirection  $./hw1 < input.in
+		
+		or input matrix value manually
+		"input matrix format" :
+			first, input row for inputMatrix_1.
+			next,  input col for inputMatrix_1.
+			finally, input all entries for inputMatrix_1.
+
+			same procedure applies to inputMatrix_2.
+	
+	output :
+		output multiplication result of  "inputMatrix_1 * inputMatrix_2".
+		output a empty Sparse Matrix if two matries can't be multiply.
+
+
+
+#Programming Homework2 :
+	main is written in hw2.cpp
+
+	compile : 
+		g++ -c SparseMatrix.cpp -std=gnu++14
+		g++ -c hw2.cpp -std=gnu++14
+		g++ -o hw2 hw2.o SparseMatrix.o -std=gnu++14
+		
+	input :
+		use input.in to redirection  $./hw2 < input.in
+		( input the first matrix in input.in )
+		
+		or input matrix value manually
+		"input matrix format" :
+			first, input row for inputMatrix
+			next,  input col for inputMatrix
+			finally, input all entries for inputMatrix
+
+	output :
+		output transposed matrix for input matrix
