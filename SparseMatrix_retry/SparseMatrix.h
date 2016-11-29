@@ -30,7 +30,6 @@ private:
 	int colSize;
 	void printColumn  ( const HeadNode * ) const;
 	void insertNode   ( const int &, const int &, const int & ); // add a node to the end of the list
-	void transposeNode( EntryNode * , vector< EntryNode * > &, vector< EntryNode * > & );
 
 
 	class EntryNode
