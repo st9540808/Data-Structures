@@ -1,0 +1,12 @@
+Data-Structures Assignment 5
+
+hw5_1.c and hw5_2.c call 'changePriority()' and 'deleteElement()' respectively.
+The structrue of the function is the same.
+It either call 'maxHeapify_smaller()' or 'maxHeapify_larger()' 
+in regard to the element to insert(or delete), to maintain its heap structure.
+
+	hw5_1.c :
+		compilation : gcc hw5_1.c -o hw5_1 -Wall -std=c99
+
+	hw5_2.c :
+		compilation : gcc hw5_2.c -o hw5_2 -Wall -std=c99
