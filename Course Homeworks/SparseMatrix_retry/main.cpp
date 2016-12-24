@@ -14,7 +14,7 @@ int main()
 
 	cout << "matrix_1\n" << matrix_1;
 	cout << "matrix_2\n" << matrix_2;
-	
+
 	matrix_3 = matrix_1 * matrix_2;
 	cout << "matrix_3 = matrix_1 * matrix_2\n" << matrix_3;
 

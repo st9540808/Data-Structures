@@ -1,7 +1,7 @@
 /**
  *	assignment 4 - hw1
  *	Sparse Matrix multiplcation
- *	
+ *
  *	Data-Sructures
  *	CH4 linked list p.178
  */
@@ -14,7 +14,7 @@ int main()
 {
 	SparseMatrix inputMatrix_1, inputMatrix_2, output;
 
-	cin >> inputMatrix_1; 
+	cin >> inputMatrix_1;
 	cin >> inputMatrix_2;
 
 	output = inputMatrix_1 * inputMatrix_2;
