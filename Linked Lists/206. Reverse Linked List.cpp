@@ -1,7 +1,9 @@
 
 #include "Solution.h"
 
-Solution::reverseList(ListNode *head)
+template<typename NODETYPE>
+ListNode<NODETYPE>* Solution<NODETYPE>::reverseList(ListNode<NODETYPE> *head)
 {
 	
+	return head;
 }

@@ -5,9 +5,10 @@
 
 #include "ListNode.h"
 
+template<typename NODETYPE>
 class Solution
 {
 public:
-	ListNode* reverseList(ListNode *head);
+	ListNode<NODETYPE> *reverseList(ListNode<NODETYPE> *head);
 
 };
