@@ -6,7 +6,7 @@ INCULDE = .
 CXXFLAGS = -g -Wall -std=gnu++14
 
 main: main.cpp $(objects)
-	$(CXX) -o main $(CXXFLAGS) $(objects) main.cpp
+	$(CXX) -I $(INCULDE) $(CXXFLAGS) $(objects) -o main main.cpp
 
 Graph.o: Graph.h
 
