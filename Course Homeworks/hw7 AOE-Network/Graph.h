@@ -11,8 +11,11 @@ public:
 	Graph();
 	~Graph();
 	void input(ifstream &); //construct the graph representation(adjacent list)
+	void print();
 
 private:
+	void addNode(int, int, int);
+
 	int NumOfVertices;
 	ListNode **adjList;
 	int *inDegree;

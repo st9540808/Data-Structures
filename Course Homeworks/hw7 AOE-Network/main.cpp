@@ -10,7 +10,7 @@ using namespace std;
 
 int main()
 {
-	Graph graph1;
+	Graph graph;
 	
 	ifstream inputGraph("Sample_input.txt", ios::in);
 	if (!inputGraph)
@@ -19,8 +19,11 @@ int main()
 		exit(EXIT_FAILURE);
 	}
 
-	graph1.input(inputGraph);
+	graph.input(inputGraph);
+	graph.print();
+
 	inputGraph.close();	
 
 	return 0;
 }
+
