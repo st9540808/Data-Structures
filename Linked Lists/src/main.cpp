@@ -1,12 +1,12 @@
 /**
- * main funciton &
- * Linked lists checkers
+ * main funciton
+ * with Linked lists checkers
  */
 
 #include <iostream>
 #include <random>
 #include <chrono>
-#include "Solution.h"
+#include "SinglyLinkedList.h"
 
 int main()
 {
@@ -16,7 +16,8 @@ int main()
 	std::uniform_int_distribution<int> gen(1, 10);
 	unsigned listSize = gen(generator);
 
-	Solution<int> list;
+	SinglyLinkedList<int> list(listSize);
 
 	return 0;
 }
+

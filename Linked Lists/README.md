@@ -1,10 +1,8 @@
 # Linked Lists Data Structrues
 
-__Programming practices with leetcode and exercises on textbook__
+__Programming practices with fundamental operations and exercises on textbook__
 
-
-leetcode including :
- * [206. Reverse Linked List](https://leetcode.com/problems/reverse-linked-list/)
+Singly Linked List :
 
 <br>
 
