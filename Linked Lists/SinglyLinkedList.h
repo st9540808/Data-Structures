@@ -35,9 +35,7 @@ private:
 
 template<typename NODETYPE>
 SinglyLinkedList<NODETYPE>::SinglyLinkedList()
-	: head(NULL), isSorted(false)
-{
-}
+	: head(NULL), isSorted(false) {}
 
 template<typename NODETYPE>
 SinglyLinkedList<NODETYPE>::~SinglyLinkedList()
@@ -84,7 +82,26 @@ void SinglyLinkedList<NODETYPE>::insertAtFront(const NODETYPE &val)
 template<typename NODETYPE>
 void SinglyLinkedList<NODETYPE>::sortedInsert(const NODETYPE &val)
 {
-	cout << val;
+	ListNode<NODETYPE> *newNodePtr = new ListNode<NODETYPE>(val);
+	
+	if (isSorted == false) // if the list is not sorted
+		insertionSort();
+	
+	if (head == NULL)
+		head = newNodePtr;
+	else if (head->val >= val)
+	{
+		newNodePtr->next = head;
+		head = newNodePtr;
+	}
+	else
+	{
+		ListNode<NODETYPE> *tempPtr = head; 
+		for (;	tempPtr->next != NULL and tempPtr->next->val < val;
+				tempPtr = tempPtr->next) ;
+		newNodePtr->next = tempPtr->next;
+		tempPtr->next = newNodePtr;
+	}
 }
 
 template<typename NODETYPE>
@@ -102,6 +119,11 @@ void SinglyLinkedList<NODETYPE>::print() const
 	cout << "NULL\n";
 }
 
+template<typename NODETYPE>
+bool SinglyLinkedList<NODETYPE>::isEmpty() const
+{
+	return head == NULL;
+}
 
 // advance opertions on linked list
 template<typename NODETYPE>
@@ -137,6 +159,7 @@ void SinglyLinkedList<NODETYPE>::insertionSort()
 		else
 			currentPtr = currentPtr->next;
 	}
+	isSorted = true;
 }
 
 template<typename NODETYPE>
