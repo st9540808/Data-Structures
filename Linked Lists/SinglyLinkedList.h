@@ -16,15 +16,15 @@ class SinglyLinkedList
 public:
 	SinglyLinkedList();
 	~SinglyLinkedList();
-	ListNode<NODETYPE>* getHead();
-	void insertAtEnd(const int &);
-	void insertAtFront(const int &);
-	void sortedInsert();
+	void insertAtEnd(const NODETYPE &);
+	void insertAtFront(const NODETYPE &);
+	void sortedInsert(const NODETYPE &); //insert into a sorted linked list
 	bool isEmpty() const;
 	void print() const;
-	
+
 	void reverseList_Recursive();
 	void reverseList_Iterative();
+	void insertionSort();
 	void mergeSort();
 
 private:
@@ -52,26 +52,26 @@ SinglyLinkedList<NODETYPE>::~SinglyLinkedList()
 }
 
 template<typename NODETYPE>
-void SinglyLinkedList<NODETYPE>::insertAtEnd(const int &val)
+void SinglyLinkedList<NODETYPE>::insertAtEnd(const NODETYPE &val)
 {
 	ListNode<NODETYPE> *newNodePtr = new ListNode<NODETYPE>(val);
 	ListNode<NODETYPE> *currentPtr = head;
-	
+
 	if (head == NULL)
-		head = newNodePtr; 
+		head = newNodePtr;
 	else
 	{
-		while(currentPtr->next != NULL)
+		while (currentPtr->next != NULL)
 			currentPtr = currentPtr->next;
 		currentPtr->next = newNodePtr;
 	}
 }
 
 template<typename NODETYPE>
-void SinglyLinkedList<NODETYPE>::insertAtFront(const int &val)
+void SinglyLinkedList<NODETYPE>::insertAtFront(const NODETYPE &val)
 {
 	ListNode<NODETYPE> *newNodePtr = new ListNode<NODETYPE>(val);
-	
+
 	if (head == NULL)
 		head = newNodePtr;
 	else
@@ -82,10 +82,16 @@ void SinglyLinkedList<NODETYPE>::insertAtFront(const int &val)
 }
 
 template<typename NODETYPE>
+void SinglyLinkedList<NODETYPE>::sortedInsert(const NODETYPE &val)
+{
+	cout << val;
+}
+
+template<typename NODETYPE>
 void SinglyLinkedList<NODETYPE>::print() const
 {
 	ListNode<NODETYPE> *currentPtr = head;
-	
+
 	cout << "head -> ";
 	while (currentPtr != NULL)
 	{
@@ -94,6 +100,50 @@ void SinglyLinkedList<NODETYPE>::print() const
 		currentPtr = currentPtr->next;
 	}
 	cout << "NULL\n";
+}
+
+
+// advance opertions on linked list
+template<typename NODETYPE>
+void SinglyLinkedList<NODETYPE>::insertionSort()
+{
+	// nextPtr is always one step ahead of currentPtr
+	ListNode<NODETYPE> *currentPtr = head, *nextPtr, *tempPtr;
+
+	if (head == NULL or head->next == NULL)
+		return;
+
+	while (currentPtr->next != NULL)
+	{			
+		nextPtr = currentPtr->next;
+		
+		if (nextPtr->val < currentPtr->val)
+			if (head->val >= nextPtr->val)
+			{
+				// insert in the front of the list
+				currentPtr->next = nextPtr->next;
+				nextPtr->next = head;
+				head = nextPtr;
+			}
+			else
+			{
+				for (tempPtr = head; 
+						tempPtr->next != currentPtr and tempPtr->next->val < nextPtr->val;
+						tempPtr = tempPtr->next) ;
+				currentPtr->next = nextPtr->next;
+				nextPtr->next = tempPtr->next;
+				tempPtr->next = nextPtr;
+			}
+		else
+			currentPtr = currentPtr->next;
+	}
+}
+
+template<typename NODETYPE>
+void SinglyLinkedList<NODETYPE>::mergeSort()
+{
+	ListNode<NODETYPE> *currentPtr = head;
+	cout << currentPtr->next;
 }
 
 #endif
