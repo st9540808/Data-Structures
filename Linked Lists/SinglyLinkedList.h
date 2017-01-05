@@ -29,7 +29,7 @@ public:
 
 private:
 	ListNode<NODETYPE> *head;
-	bool isSorted;
+	bool isSorted; // is true only if using sortedInsert() 
 };
 
 
@@ -63,6 +63,7 @@ void SinglyLinkedList<NODETYPE>::insertAtEnd(const NODETYPE &val)
 			currentPtr = currentPtr->next;
 		currentPtr->next = newNodePtr;
 	}
+	isSorted = false;
 }
 
 template<typename NODETYPE>
@@ -77,6 +78,7 @@ void SinglyLinkedList<NODETYPE>::insertAtFront(const NODETYPE &val)
 		newNodePtr->next = head;
 		head = newNodePtr;
 	}
+	isSorted = false;
 }
 
 template<typename NODETYPE>
@@ -84,7 +86,9 @@ void SinglyLinkedList<NODETYPE>::sortedInsert(const NODETYPE &val)
 {
 	ListNode<NODETYPE> *newNodePtr = new ListNode<NODETYPE>(val);
 	
-	if (isSorted == false) // if the list is not sorted
+	if (isSorted == false 
+			and head != NULL 
+			and head->next != NULL) // if the list is not sorted and contain at least two nodes
 		insertionSort();
 	
 	if (head == NULL)
@@ -127,14 +131,19 @@ bool SinglyLinkedList<NODETYPE>::isEmpty() const
 
 // advance opertions on linked list
 template<typename NODETYPE>
+void SinglyLinkedList<NODETYPE>::reverseList_Iterative()
+{
+
+}
+
+template<typename NODETYPE>
 void SinglyLinkedList<NODETYPE>::insertionSort()
 {
-	// nextPtr is always one step ahead of currentPtr
-	ListNode<NODETYPE> *currentPtr = head, *nextPtr, *tempPtr;
-
 	if (head == NULL or head->next == NULL)
 		return;
 
+	// nextPtr is always one step ahead of currentPtr
+	ListNode<NODETYPE> *currentPtr = head, *nextPtr, *tempPtr;
 	while (currentPtr->next != NULL)
 	{			
 		nextPtr = currentPtr->next;
