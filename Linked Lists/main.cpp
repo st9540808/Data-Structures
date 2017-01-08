@@ -14,10 +14,14 @@ using namespace std;
 void testSLL();
 uint64_t getInsertionSortTime(int length,
 		default_random_engine &generator); // change return type to unsigned
+bool SLL_sortingchecker();
 
 int main()
 {
-	testSLL();
+//	testSLL();
+	for (int i = 0; i < 500; ++i)
+		if (SLL_sortingchecker() == false)
+			cout << "wrong\n";
 
 	return 0;
 }
@@ -30,7 +34,7 @@ void testSLL()
 	
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 	std::default_random_engine generator(seed);
-	for (int i = 0; i <= 75000; i += 50)
+	for (int i = 0; i <= 7500; i += 50)
 	{
 		uint64_t elapseTime = getInsertionSortTime(i, generator);
 		outputFile << i << ',' << elapseTime << endl;
@@ -62,16 +66,31 @@ uint64_t getInsertionSortTime(int length,
 				break;
 		}
 	}
-//	cout << length << ",";
-//	cout << list.getSize() << " ";	
-//	list.print();
-//	cout << "\n";
+	cout << list.getSize() << " ";	
+	list.print();
+	cout << "\n";
 	
 	std::chrono::high_resolution_clock::time_point t1 = high_resolution_clock::now();
 	list.insertionSort();
 	std::chrono::high_resolution_clock::time_point t2 = high_resolution_clock::now();
 	uint64_t duration = duration_cast<nanoseconds>(t2 - t1).count();
-//	list.print();
+	list.print();
 //	cout << duration << "\n";
 	return duration;
+}
+
+bool SLL_sortingchecker()
+{
+	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+	std::default_random_engine generator(seed);
+	std::uniform_int_distribution<int> gen(0, 10000);
+	
+	SinglyLinkedList<int> list;
+	int size = gen(generator);
+	for (int i = 0; i < size; ++i)
+		list.insertAtFront(gen(generator));
+	list.insertionSort();
+	list.print();
+
+	return list.isSorted(); 
 }

@@ -1,7 +1,7 @@
 all: main
 
 objects =
-CXX = g++
+CXX = g++-6
 INCULDE = .
 CXXFLAGS = -g -Wall -std=gnu++14 
 

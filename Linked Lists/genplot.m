@@ -3,7 +3,7 @@
 
 inputFile = fopen('output.out', 'r');
 x = fscanf(inputFile, '%d,%f', [2, Inf]);
-x(2,:) = x(2,:)/10e9;
+x(2,:) = x(2,:) * 10e-9;
 %disp(x);
 
 

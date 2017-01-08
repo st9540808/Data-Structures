@@ -22,6 +22,7 @@ public:
 	bool isEmpty() const;
 	uint32_t getSize() const;
 	void print() const;
+	bool isSorted() const;
 
 	void reverseList_Recursive();
 	void reverseList_Iterative();
@@ -102,6 +103,7 @@ void SinglyLinkedList<NODETYPE>::sortedInsert(const NODETYPE &val)
 		newNodePtr->next = tempPtr->next;
 		tempPtr->next = newNodePtr;
 	}
+	++size;
 }
 
 template<typename NODETYPE>
@@ -131,6 +133,20 @@ uint32_t SinglyLinkedList<NODETYPE>::getSize() const
 	return size;
 }
 
+template<typename NODETYPE>
+bool SinglyLinkedList<NODETYPE>::isSorted() const
+{
+	ListNode<NODETYPE> *currentPtr = head;
+	while (currentPtr != NULL and currentPtr->next != NULL)
+	{
+		if (currentPtr->val <= currentPtr->next->val)
+			currentPtr = currentPtr->next;
+		else
+			return false;
+	}
+	return true;
+}
+
 // advance opertions on linked list
 template<typename NODETYPE>
 void SinglyLinkedList<NODETYPE>::reverseList_Iterative()
@@ -139,7 +155,7 @@ void SinglyLinkedList<NODETYPE>::reverseList_Iterative()
 }
 
 template<typename NODETYPE>
-void SinglyLinkedList<NODETYPE>::insertionSort()
+void SinglyLinkedList<NODETYPE>::insertionSort() // stable sort
 {
 	if (head == NULL or head->next == NULL)
 		return;
@@ -151,7 +167,7 @@ void SinglyLinkedList<NODETYPE>::insertionSort()
 		nextPtr = currentPtr->next;
 		
 		if (nextPtr->val < currentPtr->val)
-			if (head->val >= nextPtr->val)
+			if (head->val > nextPtr->val)
 			{
 				// insert in the front of the list
 				currentPtr->next = nextPtr->next;
@@ -161,7 +177,7 @@ void SinglyLinkedList<NODETYPE>::insertionSort()
 			else
 			{
 				for (tempPtr = head;
-					 tempPtr->next != currentPtr and tempPtr->next->val < nextPtr->val;
+					 tempPtr->next != currentPtr and tempPtr->next->val <= nextPtr->val;
 					 tempPtr = tempPtr->next) ;
 				currentPtr->next = nextPtr->next;
 				nextPtr->next = tempPtr->next;
