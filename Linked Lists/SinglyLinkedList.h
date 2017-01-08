@@ -20,6 +20,7 @@ public:
 	void insertAtFront(const NODETYPE &);
 	void sortedInsert(const NODETYPE &); //insert into a sorted linked list
 	bool isEmpty() const;
+	uint32_t getSize() const;
 	void print() const;
 
 	void reverseList_Recursive();
@@ -29,13 +30,13 @@ public:
 
 private:
 	ListNode<NODETYPE> *head;
-	bool isSorted; // is true only if using sortedInsert() 
+	uint32_t size;
 };
 
 
 template<typename NODETYPE>
 SinglyLinkedList<NODETYPE>::SinglyLinkedList()
-	: head(NULL), isSorted(false) {}
+	: head(NULL), size(0) {}
 
 template<typename NODETYPE>
 SinglyLinkedList<NODETYPE>::~SinglyLinkedList()
@@ -63,7 +64,7 @@ void SinglyLinkedList<NODETYPE>::insertAtEnd(const NODETYPE &val)
 			currentPtr = currentPtr->next;
 		currentPtr->next = newNodePtr;
 	}
-	isSorted = false;
+	++size;
 }
 
 template<typename NODETYPE>
@@ -78,18 +79,13 @@ void SinglyLinkedList<NODETYPE>::insertAtFront(const NODETYPE &val)
 		newNodePtr->next = head;
 		head = newNodePtr;
 	}
-	isSorted = false;
+	++size;
 }
 
 template<typename NODETYPE>
 void SinglyLinkedList<NODETYPE>::sortedInsert(const NODETYPE &val)
 {
 	ListNode<NODETYPE> *newNodePtr = new ListNode<NODETYPE>(val);
-	
-	if (isSorted == false 
-			and head != NULL 
-			and head->next != NULL) // if the list is not sorted and contain at least two nodes
-		insertionSort();
 	
 	if (head == NULL)
 		head = newNodePtr;
@@ -101,8 +97,8 @@ void SinglyLinkedList<NODETYPE>::sortedInsert(const NODETYPE &val)
 	else
 	{
 		ListNode<NODETYPE> *tempPtr = head; 
-		for (;	tempPtr->next != NULL and tempPtr->next->val < val;
-				tempPtr = tempPtr->next) ;
+		for (; tempPtr->next != NULL and tempPtr->next->val < val;
+			   tempPtr = tempPtr->next) ;
 		newNodePtr->next = tempPtr->next;
 		tempPtr->next = newNodePtr;
 	}
@@ -127,6 +123,12 @@ template<typename NODETYPE>
 bool SinglyLinkedList<NODETYPE>::isEmpty() const
 {
 	return head == NULL;
+}
+
+template<typename NODETYPE>
+uint32_t SinglyLinkedList<NODETYPE>::getSize() const
+{
+	return size;
 }
 
 // advance opertions on linked list
@@ -158,9 +160,9 @@ void SinglyLinkedList<NODETYPE>::insertionSort()
 			}
 			else
 			{
-				for (tempPtr = head; 
-						tempPtr->next != currentPtr and tempPtr->next->val < nextPtr->val;
-						tempPtr = tempPtr->next) ;
+				for (tempPtr = head;
+					 tempPtr->next != currentPtr and tempPtr->next->val < nextPtr->val;
+					 tempPtr = tempPtr->next) ;
 				currentPtr->next = nextPtr->next;
 				nextPtr->next = tempPtr->next;
 				tempPtr->next = nextPtr;
@@ -168,7 +170,6 @@ void SinglyLinkedList<NODETYPE>::insertionSort()
 		else
 			currentPtr = currentPtr->next;
 	}
-	isSorted = true;
 }
 
 template<typename NODETYPE>

@@ -8,8 +8,8 @@
 #include <chrono>
 #include <fstream>
 #include "SinglyLinkedList.h"
-using namespace std;
 using namespace std::chrono;
+using namespace std;
 
 void testSLL();
 uint64_t getInsertionSortTime(int length,
@@ -30,7 +30,7 @@ void testSLL()
 	
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 	std::default_random_engine generator(seed);
-	for (int i = 1; i <= 50000; i += 50)
+	for (int i = 0; i <= 75000; i += 50)
 	{
 		uint64_t elapseTime = getInsertionSortTime(i, generator);
 		outputFile << i << ',' << elapseTime << endl;
@@ -42,15 +42,15 @@ void testSLL()
 uint64_t getInsertionSortTime(int length,
 		default_random_engine &generator)
 {
-	std::uniform_int_distribution<int> gen(0, length*5);
+	std::uniform_int_distribution<int> gen(0, length*2);
 	std::uniform_int_distribution<int> select(0, 1);
 	
 	SinglyLinkedList<int> list;
 	for (int i = 0; i < length; ++i)
 	{
 		int integer = gen(generator);
-		int selectInsert = select(generator);
-		switch (selectInsert)
+//		int selectInsert = select(generator);
+		switch (1)//selectInsert)
 		{
 			case 0:
 				list.insertAtEnd(integer);
@@ -63,6 +63,7 @@ uint64_t getInsertionSortTime(int length,
 		}
 	}
 //	cout << length << ",";
+//	cout << list.getSize() << " ";	
 //	list.print();
 //	cout << "\n";
 	
