@@ -1,8 +1,12 @@
+/**
+ *	Graph Definition
+ */
+
 #ifndef Graph_H
 #define Graph_H
 
 #include <fstream>
-#include <string>
+#include <vector>
 #include "ListNode.h"
 using namespace std;
 
@@ -11,16 +15,17 @@ class Graph
 public:
 	Graph();
 	~Graph();
-	string topologicalSort();
+	bool isDAG();
+	vector<int> topologicalSort();
 	void input(ifstream &); //construct the graph representation(adjacent list)
 	void print();
 
 private:
 	void addNode(int, int, int);
 
-	int V; //number of vertices
-	ListNode **adjList;
-	int *inDegree;
+	vector<ListNode *>::size_type V; //number of vertices
+	vector<ListNode *> adjList;
+	vector<int> inDegree;
 };
 
 #endif

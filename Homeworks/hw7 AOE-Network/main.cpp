@@ -22,8 +22,8 @@ int main()
 	graph.input(inputGraph);
 	graph.print();
 
-	inputGraph.close();	
+	graph.topologicalSort();
 
+	inputGraph.close();	
 	return 0;
 }
-
