@@ -5,6 +5,7 @@ By calling method topologicalSort(), it calculate
 - early time
 - latest time
 - slack
+<br>
 and print out in a readable formate <br>
 
 
