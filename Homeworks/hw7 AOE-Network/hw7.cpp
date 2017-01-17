@@ -1,11 +1,45 @@
-// utility function of AOE Network
 #include <iostream>
+#include <fstream>
+#include <cstddef>
 #include <iomanip>
+#include <vector>
 #include <stack>
-#include "ListNode.h"
-#include "Graph.h"
 using namespace std;
 
+
+struct ListNode
+{
+	const int vertex;
+	const int duration;
+	ListNode *link;
+	ListNode(int v, int dur) : vertex(v), duration(dur), link(NULL) {}
+};
+
+
+
+// Graph Definition
+
+class Graph
+{
+public:
+	Graph();
+	~Graph();
+	vector<int> topologicalSort();
+	void printEssential();
+	void input(ifstream &); // construct the graph representation(adjacent list)
+	void print();
+
+private:
+	void addNode(int, int, int);
+
+	vector<ListNode *> adjList;
+	vector<int> inDegree;
+	vector<int> earlyTime;
+	vector<int> lateTime;
+};
+
+
+// utility function of AOE Network
 vector<int> Graph::topologicalSort()
 {
 	vector<int> order; // topological order
@@ -206,4 +240,23 @@ void Graph::print()
 			cout << inDegree.at(i) << " | " << i;
 		cout << endl;
 	}
+}
+
+
+int main()
+{
+	std::ifstream inputGraph("Sample_input.txt", ios::in);
+	if (!inputGraph)
+	{
+		std::cerr << "File cannot be opened";
+		exit(EXIT_FAILURE);
+	}
+
+	Graph graph;
+	graph.input(inputGraph);
+	graph.topologicalSort();
+	graph.printEssential();
+
+	inputGraph.close();	
+	return 0;
 }

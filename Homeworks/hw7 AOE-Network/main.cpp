@@ -18,7 +18,6 @@ int main()
 
 	Graph graph;
 	graph.input(inputGraph);
-	graph.print();
 	graph.topologicalSort();
 	graph.printEssential();
 

@@ -1,13 +1,14 @@
 # [hw7 - AOE Network](https://github.com/st9540808/Data-Structures/tree/master/Homeworks/hw7%20AOE-Network)
 
+## Description
 the program read input graph from file `Sample_input.txt`. <br>
-By calling method topologicalSort(), it calculate 
+By calling method ```topologicalSort()```, it calculate 
 
 - early time
 - latest time
 - slack
 
-and print out in a readable formate 
+and using method ```printEssential()``` print out in a readable formate 
 <br>
 
 
@@ -36,7 +37,7 @@ a9         7|         10|       3|         No|
 a10       16|         16|       0|        Yes|
 a11       14|         14|       0|        Yes|
 ```
-if input graph is DAG, print out :
+if there is a cycle in the input graph, print out :
 ```
 input Graph in not a DAG (directed acyclic graph)
 program terminated.
