@@ -1,6 +1,6 @@
 #[hw7 - AOE Network](https://github.com/st9540808/Data-Structures/tree/master/Homeworks/hw7%20AOE-Network)
 
-the program read input graph from file `Sample_input.txt`.
+the program read input graph from file `Sample_input.txt`. <br>
 and print out early time, lastest time, slack.
 
 ##Compilation
