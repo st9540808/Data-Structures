@@ -6,23 +6,23 @@
 #include <fstream>
 #include <cstdlib>
 #include "Graph.h"
-using namespace std;
 
 int main()
 {
-	Graph graph;
-	
-	ifstream inputGraph("Sample_input.txt", ios::in);
+	std::ifstream inputGraph("Sample_input.txt", ios::in);
 	if (!inputGraph)
 	{
-		cerr << "File cannot be opened";
+		std::cerr << "File cannot be opened";
 		exit(EXIT_FAILURE);
 	}
 
+	Graph graph;
 	graph.input(inputGraph);
 	graph.print();
-
-	graph.topologicalSort();
+	vector<int> order = graph.topologicalSort();
+	for (auto&& i : order)
+		std::cout << i << " ";
+	cout << endl;
 
 	inputGraph.close();	
 	return 0;

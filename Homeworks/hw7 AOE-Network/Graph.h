@@ -15,17 +15,17 @@ class Graph
 public:
 	Graph();
 	~Graph();
-	bool isDAG();
 	vector<int> topologicalSort();
-	void input(ifstream &); //construct the graph representation(adjacent list)
+	void input(ifstream &); // construct the graph representation(adjacent list)
 	void print();
 
 private:
 	void addNode(int, int, int);
 
-	vector<ListNode *>::size_type V; //number of vertices
 	vector<ListNode *> adjList;
 	vector<int> inDegree;
+	vector<int> earlyTime;
+	vector<int> lateTime;
 };
 
 #endif

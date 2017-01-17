@@ -6,26 +6,23 @@
 #include "Graph.h"
 using namespace std;
 
-bool Graph::isDAG()
-{
-	bool is_DAG = false;
-
-	return is_DAG;
-}
-
 vector<int> Graph::topologicalSort()
 {
-	vector<int> order;
+	vector<int> order; // topological order
+	vector<int> earliestEventTime(adjList.size(), 0);
+	vector<int> latestEventTime(adjList.size(), 0);
 	stack<int> verticesStack;
 
 	// gather all vertices with no predecessors (ie inDegree[i] == 0)
-	for (int i = 0; i < V; ++i)
-		if (inDegree[i] == 0)
+	for (decltype(inDegree.size()) i = 0; i < inDegree.size(); ++i)
+		if (inDegree.at(i) == 0)
+		{	
 			verticesStack.push(i);
-
-	for (int i = 0; i < V; ++i)
-	{
-		if (inDegree[i] == -1)
+			inDegree.at(i) = -1;
+		}
+	
+	for (decltype(adjList.size()) i = 0; i < adjList.size(); ++i)
+		if (verticesStack.empty() == true)
 		{
 			cerr << "input Graph in not a DAG (directed acyclic graph)"
 			     << "program terminated.\n";
@@ -33,67 +30,81 @@ vector<int> Graph::topologicalSort()
 		}
 		else
 		{
-			
+			int j = verticesStack.top();
+			verticesStack.pop();
+			order.push_back(j);
+			for (auto ptr = adjList.at(j); ptr != NULL; ptr = ptr->link)
+			{
+				int k = ptr->vertex;
+				if (earliestEventTime.at(k) < earliestEventTime.at(j) + ptr->duration)
+					earliestEventTime.at(k) = earliestEventTime.at(j) + ptr->duration;
+				--inDegree.at(k);
+				if (inDegree.at(k) == 0)
+				{
+					verticesStack.push(k);
+					inDegree.at(k) = -1;
+				}
+			}
 		}
-	}
-
+	for (auto&& i : earliestEventTime)
+		cout << i << " ";
+	cout << endl;
 	return order;
 }
 
 
 /**
- * basic method of Graph
+ * basic method for Graph
  * including :
- * +input()  -input a AOE Network and build adjacent list
- * +print()  -print out in degree for every vertices and adjacent list
+ * -addNode() --add the node into adjacent list
+ * +input()  --input a AOE Network and build adjacent list
+ * +print()  --print out in degree for every vertices and adjacent list
  */
-Graph::Graph()
-	: V(0) {} // also creating vector of size 0
+Graph::Graph() 
+{
+} // also creating vector of size 0
 
 Graph::~Graph()
 {
-	for (int i = 0; i < V; ++i)
-	{
-		ListNode *curNodePtr = adjList[i], *tmpNodePtr;
-
+	for (auto curNodePtr: adjList)
 		while (curNodePtr != NULL)
 		{
-			tmpNodePtr = curNodePtr;
+			auto tmpNodePtr = curNodePtr;
 			curNodePtr = curNodePtr->link;
 			delete tmpNodePtr;
 		}
-	}
 }
 
 void Graph::input(ifstream &inputGraph)
 {
 	// get the total number of vertices
-	inputGraph >> V;
-	if (V < 0)
+	int numOfVertices;
+	inputGraph >> numOfVertices;
+	if (numOfVertices < 0)
 	{
 		cerr << "invalid number of vertice\n";
 		exit(1);
 	}
 
 	// construct adjacent list
-	adjList.resize(V, NULL);
-	inDegree.resize(V, 0);
+	adjList.resize(numOfVertices, NULL);
+	inDegree.resize(numOfVertices, 0);
 
 	int inputDur;
-	for (int i = 0; i < V; ++i)
-		for (int j = 0; j < V; ++j)
+	for (decltype(adjList.size()) i = 0; i < adjList.size(); ++i)
+		for (decltype(adjList.size()) j = 0; j < adjList.size(); ++j)
 		{
 			inputGraph >> inputDur;
-			if (inputDur > 0)
+			if (inputDur > 0) // skip negative duration
 			{
 				addNode(i, j, inputDur);
 				++inDegree.at(j);
+				earlyTime.push_back(0), lateTime.push_back(0);
 			}
 		}
 }
 
-// i : tail node
-// j : head node
+// i : tail node, j : head node
 void Graph::addNode(int i, int j, int dur)
 {
 	ListNode *newNode = new ListNode(j, dur);
@@ -114,11 +125,11 @@ void Graph::addNode(int i, int j, int dur)
 void Graph::print()
 {
 	cout << "format : (vertex, duration)\n";
-	for (int i = 0; i < V; ++i)
+	for (decltype(adjList.size()) i = 0; i < adjList.size(); ++i)
 	{
 		if (adjList.at(i) != NULL)
 		{
-			ListNode *curNodePtr = adjList[i];
+			ListNode *curNodePtr = adjList.at(i);
 
 			cout << inDegree.at(i) << " | " << i;
 			while (curNodePtr != NULL)
