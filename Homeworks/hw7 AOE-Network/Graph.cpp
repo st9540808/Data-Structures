@@ -1,6 +1,7 @@
 // utility function of AOE Network
 
 #include <iostream>
+#include <iomanip>
 #include <stack>
 #include "ListNode.h"
 #include "Graph.h"
@@ -21,6 +22,7 @@ vector<int> Graph::topologicalSort()
 			inDegree.at(i) = -1;
 		}
 	
+	// do topological sort and calculate earliest event time in paraelle
 	for (decltype(adjList.size()) i = 0; i < adjList.size(); ++i)
 		if (verticesStack.empty() == true)
 		{
@@ -46,12 +48,73 @@ vector<int> Graph::topologicalSort()
 				}
 			}
 		}
-	for (auto&& i : earliestEventTime)
-		cout << i << " ";
-	cout << endl;
+	
+	// calculate early time
+	int activityIndex = 0;
+	for (decltype(adjList.size()) i = 0; i < adjList.size(); ++i)
+	{
+		auto ptr = adjList.at(i);
+		while (ptr != NULL)
+		{
+			earlyTime.at(activityIndex) = earliestEventTime.at(i);
+			++activityIndex;
+			ptr = ptr->link;
+		}
+	}
+
+	// calculate latest event time
+	for (auto i = order.rbegin(); i != order.rend(); ++i)
+		if (adjList.at(*i) == NULL)
+			latestEventTime.at(*i) = earliestEventTime.at(*i);
+		else
+		{
+			auto ptr = adjList.at(*i);
+			latestEventTime.at(*i) = latestEventTime.at(ptr->vertex) - ptr->duration;
+			while (ptr = ptr->link, ptr != NULL)
+				if (latestEventTime.at(ptr->vertex) - ptr->duration < latestEventTime.at(*i))
+					latestEventTime.at(*i) = latestEventTime.at(ptr->vertex) - ptr->duration;
+		}
+	
+	// calculate latest time
+	activityIndex = 0;
+	for (auto ptr : adjList)
+		while (ptr != NULL)
+		{
+			lateTime.at(activityIndex) = latestEventTime.at(ptr->vertex) - ptr->duration;
+			++activityIndex;
+			ptr = ptr->link;
+		}
+
 	return order;
 }
 
+void Graph::printEssential()
+{
+	cout << setw(13) << "earlyTime|" 
+		 << setw(12) << "lateTime|" 
+		 << setw(9)  << "slack|" 
+		 << setw(12) << "critical|" << endl;
+	for (decltype(earlyTime.size()) i = 0; i < earlyTime.size(); ++i)
+	{
+		cout << 'a' << i+1;
+		if (i+1 < 10)
+		{
+			cout << setw(10) << earlyTime.at(i) << "|"
+				 << setw(11) << lateTime.at(i) << "|"
+				 << setw(8)  << lateTime.at(i) - earlyTime.at(i) << "|";
+			cout << setw(12) <<(lateTime.at(i) - earlyTime.at(i) == 0 
+					? "Yes|" : "No|") << endl;
+		}
+		else if (i+1 < 100 and i+1 >= 10)
+		{
+			cout << setw(9) << earlyTime.at(i) << "|"
+				 << setw(11) << lateTime.at(i) << "|"
+				 << setw(8)  << lateTime.at(i) - earlyTime.at(i) << "|";
+			cout << setw(12) <<(lateTime.at(i) - earlyTime.at(i) == 0 
+					? "Yes|" : "No|") << endl;
+		}
+	}
+}
 
 /**
  * basic method for Graph

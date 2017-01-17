@@ -16,6 +16,7 @@ public:
 	Graph();
 	~Graph();
 	vector<int> topologicalSort();
+	void printEssential();
 	void input(ifstream &); // construct the graph representation(adjacent list)
 	void print();
 

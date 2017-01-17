@@ -19,10 +19,8 @@ int main()
 	Graph graph;
 	graph.input(inputGraph);
 	graph.print();
-	vector<int> order = graph.topologicalSort();
-	for (auto&& i : order)
-		std::cout << i << " ";
-	cout << endl;
+	graph.topologicalSort();
+	graph.printEssential();
 
 	inputGraph.close();	
 	return 0;
