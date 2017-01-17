@@ -26,7 +26,7 @@ vector<int> Graph::topologicalSort()
 	for (decltype(adjList.size()) i = 0; i < adjList.size(); ++i)
 		if (verticesStack.empty() == true)
 		{
-			cerr << "input Graph in not a DAG (directed acyclic graph)"
+			cerr << "input Graph in not a DAG (directed acyclic graph)\n"
 			     << "program terminated.\n";
 			exit(EXIT_FAILURE);
 		}
@@ -84,7 +84,10 @@ vector<int> Graph::topologicalSort()
 			++activityIndex;
 			ptr = ptr->link;
 		}
-
+	
+	for (auto i : order)
+		cout << i << " ";
+	cout << endl;
 	return order;
 }
 

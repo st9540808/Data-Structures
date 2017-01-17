@@ -35,6 +35,11 @@ a9         7|         10|       3|         No|
 a10       16|         16|       0|        Yes|
 a11       14|         14|       0|        Yes|
 ```
+if input graph is DAG, print out :
+```
+input Graph in not a DAG (directed acyclic graph)
+program terminated.
+```
 <br>
 
 
