@@ -1,15 +1,21 @@
-#[hw7 - AOE Network](https://github.com/st9540808/Data-Structures/tree/master/Homeworks/hw7%20AOE-Network)
+# [hw7 - AOE Network](https://github.com/st9540808/Data-Structures/tree/master/Homeworks/hw7%20AOE-Network)
 
 the program read input graph from file `Sample_input.txt`. <br>
-and print out early time, lastest time, slack.
+By calling method topologicalSort(), it calculate 
+- early time
+- latest time
+- slack
+and print out in a readable formate <br>
 
-##Compilation
+
+## Compilation
 ```
 g++ hw7.cpp -o main -std=gnu++14
 ```
 > this is for the final hand-in version on moodle
 
-##Class UML
+
+## Class UML
 ```cpp
 class Graph
 
