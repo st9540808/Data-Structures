@@ -4,7 +4,9 @@ the program read input graph from file `Sample_input.txt`.
 and print out early time, lastest time, slack.
 
 ##Compilation
-```g++ hw7.cpp -o main -std=gnu++14```
+```
+g++ hw7.cpp -o main -std=gnu++14
+```
 > this is for the final hand-in version on moodle
 
 ##Class UML
