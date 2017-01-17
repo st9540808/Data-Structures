@@ -16,6 +16,7 @@ and print out in a readable formate
 g++ hw7.cpp -o main -std=gnu++14
 ```
 > forget to add ```-std=gnu++14``` flag will result in compilation error
+
 > this is for the final hand-in version on moodle
 <br>
 
