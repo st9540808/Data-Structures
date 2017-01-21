@@ -2,7 +2,6 @@
  * Singly Linked List Definition
  * including all operations on SLL
  */
-
 #ifndef SLL_H
 #define SLL_H
 
@@ -23,11 +22,7 @@ public:
 	uint32_t getSize() const;
 	void print() const;
 	bool isSorted() const;
-
-	void reverseList_Recursive();
-	void reverseList_Iterative();
 	void insertionSort();
-	void mergeSort();
 
 private:
 	ListNode<NODETYPE> *head;
@@ -87,7 +82,7 @@ template<typename NODETYPE>
 void SinglyLinkedList<NODETYPE>::sortedInsert(const NODETYPE &val)
 {
 	ListNode<NODETYPE> *newNodePtr = new ListNode<NODETYPE>(val);
-	
+
 	if (head == NULL)
 		head = newNodePtr;
 	else if (head->val >= val)
@@ -97,9 +92,9 @@ void SinglyLinkedList<NODETYPE>::sortedInsert(const NODETYPE &val)
 	}
 	else
 	{
-		ListNode<NODETYPE> *tempPtr = head; 
+		ListNode<NODETYPE> *tempPtr = head;
 		for (; tempPtr->next != NULL and tempPtr->next->val < val;
-			   tempPtr = tempPtr->next) ;
+		        tempPtr = tempPtr->next) ;
 		newNodePtr->next = tempPtr->next;
 		tempPtr->next = newNodePtr;
 	}
@@ -147,14 +142,6 @@ bool SinglyLinkedList<NODETYPE>::isSorted() const
 	return true;
 }
 
-// advance opertions on linked list
-template<typename NODETYPE>
-void SinglyLinkedList<NODETYPE>::reverseList_Iterative()
-{
-
-}
-
-template<typename NODETYPE>
 void SinglyLinkedList<NODETYPE>::insertionSort() // stable sort
 {
 	if (head == NULL or head->next == NULL)
@@ -163,9 +150,9 @@ void SinglyLinkedList<NODETYPE>::insertionSort() // stable sort
 	// nextPtr is always one step ahead of currentPtr
 	ListNode<NODETYPE> *currentPtr = head, *nextPtr, *tempPtr;
 	while (currentPtr->next != NULL)
-	{			
+	{
 		nextPtr = currentPtr->next;
-		
+
 		if (nextPtr->val < currentPtr->val)
 			if (head->val > nextPtr->val)
 			{
@@ -177,8 +164,8 @@ void SinglyLinkedList<NODETYPE>::insertionSort() // stable sort
 			else
 			{
 				for (tempPtr = head;
-					 tempPtr->next != currentPtr and tempPtr->next->val <= nextPtr->val;
-					 tempPtr = tempPtr->next) ;
+				        tempPtr->next != currentPtr and tempPtr->next->val <= nextPtr->val;
+				        tempPtr = tempPtr->next) ;
 				currentPtr->next = nextPtr->next;
 				nextPtr->next = tempPtr->next;
 				tempPtr->next = nextPtr;
@@ -186,13 +173,6 @@ void SinglyLinkedList<NODETYPE>::insertionSort() // stable sort
 		else
 			currentPtr = currentPtr->next;
 	}
-}
-
-template<typename NODETYPE>
-void SinglyLinkedList<NODETYPE>::mergeSort()
-{
-	ListNode<NODETYPE> *currentPtr = head;
-	cout << currentPtr->next;
 }
 
 #endif

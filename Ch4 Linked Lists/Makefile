@@ -2,13 +2,14 @@ all: main
 
 objects =
 CXX = g++-6
-INCULDE = .
+INCULDE = include
 CXXFLAGS = -g -Wall -std=gnu++14 
 
-main: main.cpp SinglyLinkedList.h $(objects)
-	$(CXX) -I $(INCULDE) $(objects) $(CXXFLAGS) -o main main.cpp
+main: main.cpp SLL.h $(objects)
+	$(CXX) main.cpp -o main -I $(INCULDE) $(objects) $(CXXFLAGS)
 
-
+run:
+	./main
 
 .PHONY: clean
 clean:
