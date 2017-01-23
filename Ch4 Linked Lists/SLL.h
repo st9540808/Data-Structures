@@ -48,24 +48,18 @@ public:
 	ListNode* merge(ListNode *left, ListNode *right) {
 		ListNode *newHead, *currentPtr;
 		if (left->val < right->val) {
-			newHead = left;
-			left = left->next;
-			currentPtr = newHead;
+			newHead = left; left = left->next; currentPtr = newHead;
 		}
 		else {
-			newHead = right;
-			right = right->next;
-			currentPtr = newHead;
+			newHead = right; right = right->next; currentPtr = newHead;
 		}
 		
 		while (left != NULL and right != NULL) {
 			if (left->val < right ->val) {
-				currentPtr->next = left;
-				left = left->next;
+				currentPtr->next = left; left = left->next;
 			}
 			else {
-				currentPtr->next = right;
-				right = right->next;
+				currentPtr->next = right; right = right->next;
 			}
 			currentPtr = currentPtr->next;
 		}
