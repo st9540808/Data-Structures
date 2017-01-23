@@ -10,7 +10,7 @@ using namespace std;
 
 int main()
 {
-	int n = 6000, h = 1;
+	int n = 2000, h = 1;
 	ofstream insertionSortTime, rmergeSortTime;
 	insertionSortTime.open("insertionSortTime.out");
 	rmergeSortTime.open("rmergeSortTime.out");
