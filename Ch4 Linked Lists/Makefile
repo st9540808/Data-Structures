@@ -2,7 +2,7 @@ all: main
 
 objects =
 CXX = g++-6
-INCULDE = include
+INCULDE = .
 CXXFLAGS = -g -Wall -std=gnu++14 
 
 main: main.cpp SLL.h $(objects)
