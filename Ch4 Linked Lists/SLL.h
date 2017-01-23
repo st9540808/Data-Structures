@@ -37,7 +37,7 @@ public:
 		this->head = mergeSort(this->head);
 	}
 
-    ListNode* mergeSort(ListNode *head) {
+	ListNode* mergeSort(ListNode *head) {
 		if (head == NULL or head->next == NULL)
 			return head;
 		ListNode *mid = getMiddle(head);
