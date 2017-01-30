@@ -12,8 +12,8 @@ int main()
 {
 	int n = 2000, h = 1;
 	ofstream insertionSortTime, rmergeSortTime;
-	insertionSortTime.open("insertionSortTime.out");
-	rmergeSortTime.open("rmergeSortTime.out");
+	insertionSortTime.open("./plot/insertionSortTime.out");
+	rmergeSortTime.open("./plot/rmergeSortTime.out");
 
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 	std::default_random_engine generator(seed);

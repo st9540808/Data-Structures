@@ -11,6 +11,10 @@ main: main.cpp SLL.h $(objects)
 merge:
 	$(CXX) merge.cpp -o main $(CXXFLAGS)
 
+check:
+	$(CXX) check.cpp -o main $(CXXFLAGS)
+
+
 .PHONY: clean
 clean:
 	rm main $(objects)
