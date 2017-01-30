@@ -3,9 +3,9 @@
 
 int main()
 {
-	SLL myList(100000);
-	myList.mergeSort();
-	std::cout << myList.isSorted();
+	SLL list(1000000);
+	list.mergeSort();
+	cout << list.isSorted();
 
 	return 0;
 }
