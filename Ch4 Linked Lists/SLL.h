@@ -13,7 +13,8 @@ using namespace std;
 #ifndef LISTNODE_NOTEMPALTE_H
 #define LISTNODE_NOTEMPALTE_H
 
-struct ListNode {
+struct ListNode
+{
 	int val;
 	ListNode *next;
 	ListNode(int x) : val(x), next(NULL) {};
@@ -23,7 +24,8 @@ struct ListNode {
 #ifndef SLL_RE_H
 #define SLL_RE_H
 
-class SLL {
+class SLL
+{
 private:
 	ListNode *head;
 	uint32_t size;
@@ -33,11 +35,14 @@ public:
 	~SLL();
 	void insertAtFront(const int &);
 	void print() const;
-	bool isSorted() const {
-		if (this->head == NULL) 
-			return true; 
+	void print(ListNode *) const;
+	bool isSorted() const
+	{
+		if (this->head == NULL)
+			return true;
 		ListNode *currentPtr = this->head;
-		while (currentPtr->next != NULL) {
+		while (currentPtr->next != NULL)
+		{
 			if (currentPtr->next->val < currentPtr->val)
 				return false;
 			currentPtr = currentPtr->next;
@@ -45,38 +50,47 @@ public:
 		return true;
 	}
 
-	void mergeSort() {
+	void mergeSort()
+	{
 		if (this->head == NULL) return;
 		this->head = mergeSort(this->head);
 	}
 
-	ListNode* mergeSort(ListNode *head) {
+	ListNode* mergeSort(ListNode *head)
+	{
 		if (head->next == NULL)
 			return head;
 		ListNode *mid = getMiddle(head);
-		ListNode *halfList = mid->next; mid->next = NULL;
+		ListNode *halfList = mid->next;
+		mid->next = NULL;
 		return merge(mergeSort(head), mergeSort(halfList));
 	}
-	
-	ListNode* merge(ListNode *left, ListNode *right) {
+
+	ListNode* merge(ListNode *left, ListNode *right)
+	{
 		ListNode *newHead, *currentPtr;
-		if (left->val < right->val) {
+		if (left->val < right->val)
+		{
 			newHead = left;
 			left = left->next;
 			currentPtr = newHead;
 		}
-		else {
+		else
+		{
 			newHead = right;
 			right = right->next;
 			currentPtr = newHead;
 		}
-		
-		while (left != NULL and right != NULL) {
-			if (left->val < right ->val) {
+
+		while (left != NULL and right != NULL)
+		{
+			if (left->val < right ->val)
+			{
 				currentPtr->next = left;
 				left = left->next;
 			}
-			else {
+			else
+			{
 				currentPtr->next = right;
 				right = right->next;
 			}
@@ -85,34 +99,40 @@ public:
 		currentPtr->next = (right == NULL) ? left : right;
 		return newHead;
 	}
-	
-	ListNode* getMiddle(ListNode *head) {
+
+	ListNode* getMiddle(ListNode *head)
+	{
 		ListNode *slowPtr = head, *fastPtr = head;
 		while (fastPtr->next != NULL
-				and fastPtr->next->next != NULL) {
+		        and fastPtr->next->next != NULL)
+		{
 			slowPtr = slowPtr->next;
 			fastPtr = fastPtr->next->next;
 		}
 		return slowPtr;
 	}
 
-	void insertionSort() { // stable sort
+	void insertionSort()   // stable sort
+	{
 		if (this->head == NULL or this->head->next == NULL)
 			return;
-	
+
 		// nextPtr is always one step ahead of currentPtr
 		ListNode *currentPtr = this->head, *nextPtr, *tempPtr;
-		while (currentPtr->next != NULL) {
+		while (currentPtr->next != NULL)
+		{
 			nextPtr = currentPtr->next;
-	
+
 			if (nextPtr->val < currentPtr->val)
-				if (nextPtr->val < this->head->val) {
+				if (nextPtr->val < this->head->val)
+				{
 					// insert in the front of the list
 					currentPtr->next = nextPtr->next;
 					nextPtr->next = head;
 					this->head = nextPtr;
 				}
-				else {
+				else
+				{
 					for (tempPtr = head;
 					        tempPtr->next != currentPtr and tempPtr->next->val <= nextPtr->val;
 					        tempPtr = tempPtr->next) ;
@@ -124,7 +144,6 @@ public:
 				currentPtr = currentPtr->next;
 		}
 	}
-
 };
 
 
@@ -135,14 +154,16 @@ SLL::SLL(int inputSize = 10)
 	// random generate linked list
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 	std::default_random_engine generator(seed);
-	std::uniform_int_distribution<int> gen(0, size*5);
-	
-	for (uint32_t i = 0; i < size; ++i) {
+	std::uniform_int_distribution<int> gen(0, size * 5);
+
+	for (uint32_t i = 0; i < size; ++i)
+	{
 		ListNode *newPtr = new ListNode(gen(generator));
-	
+
 		if (this->head == NULL)
 			this->head = newPtr;
-		else {
+		else
+		{
 			newPtr->next = head;
 			this->head = newPtr;
 		}
@@ -152,7 +173,8 @@ SLL::SLL(int inputSize = 10)
 SLL::~SLL()
 {
 	ListNode *currentPtr = this->head, *tempPtr;
-	while (currentPtr != NULL) {
+	while (currentPtr != NULL)
+	{
 		tempPtr = currentPtr;
 		currentPtr = currentPtr->next;
 		delete tempPtr;
@@ -165,7 +187,8 @@ void SLL::insertAtFront(const int &val)
 
 	if (this->head == NULL)
 		this->head = newPtr;
-	else {
+	else
+	{
 		newPtr->next = head;
 		this->head = newPtr;
 	}
@@ -177,12 +200,27 @@ void SLL::print() const
 	ListNode *currentPtr = this->head;
 
 	cout << "head -> ";
-	while (currentPtr != NULL) {
+	while (currentPtr != NULL)
+	{
 		cout << currentPtr->val;
 		cout << " -> ";
 		currentPtr = currentPtr->next;
 	}
 	cout << "null\n";
+}
+
+void SLL::print(ListNode *head) const
+{
+	ListNode *currentPtr = head;
+
+	cout << "head -> ";
+	while (currentPtr != NULL)
+	{
+		cout << currentPtr->val;
+		cout << " -> ";
+		currentPtr = currentPtr->next;
+	}
+	cout << "null";
 }
 
 #endif
