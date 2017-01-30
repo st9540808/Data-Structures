@@ -33,12 +33,25 @@ public:
 	~SLL();
 	void insertAtFront(const int &);
 	void print() const;
+	bool isSorted() const {
+		if (this->head == NULL) 
+			return true; 
+		ListNode *currentPtr = this->head;
+		while (currentPtr->next != NULL) {
+			if (currentPtr->next->val < currentPtr->val)
+				return false;
+			currentPtr = currentPtr->next;
+		}
+		return true;
+	}
+
 	void mergeSort() {
+		if (this->head == NULL) return;
 		this->head = mergeSort(this->head);
 	}
 
 	ListNode* mergeSort(ListNode *head) {
-		if (head == NULL or head->next == NULL)
+		if (head->next == NULL)
 			return head;
 		ListNode *mid = getMiddle(head);
 		ListNode *halfList = mid->next; mid->next = NULL;
@@ -84,7 +97,7 @@ public:
 	}
 
 	void insertionSort() { // stable sort
-		if (head == NULL or head->next == NULL)
+		if (this->head == NULL or this->head->next == NULL)
 			return;
 	
 		// nextPtr is always one step ahead of currentPtr
@@ -124,14 +137,12 @@ SLL::SLL(int inputSize = 10)
 	std::default_random_engine generator(seed);
 	std::uniform_int_distribution<int> gen(0, size*5);
 	
-	for (uint32_t i = 0; i < size; ++i) 
-	{
+	for (uint32_t i = 0; i < size; ++i) {
 		ListNode *newPtr = new ListNode(gen(generator));
 	
 		if (this->head == NULL)
 			this->head = newPtr;
-		else 
-		{
+		else {
 			newPtr->next = head;
 			this->head = newPtr;
 		}
@@ -140,9 +151,8 @@ SLL::SLL(int inputSize = 10)
 
 SLL::~SLL()
 {
-	ListNode *currentPtr = head, *tempPtr;
-	while (currentPtr != NULL)
-	{
+	ListNode *currentPtr = this->head, *tempPtr;
+	while (currentPtr != NULL) {
 		tempPtr = currentPtr;
 		currentPtr = currentPtr->next;
 		delete tempPtr;
@@ -155,8 +165,7 @@ void SLL::insertAtFront(const int &val)
 
 	if (this->head == NULL)
 		this->head = newPtr;
-	else 
-	{
+	else {
 		newPtr->next = head;
 		this->head = newPtr;
 	}
@@ -165,11 +174,10 @@ void SLL::insertAtFront(const int &val)
 
 void SLL::print() const
 {
-	ListNode *currentPtr = head;
+	ListNode *currentPtr = this->head;
 
 	cout << "head -> ";
-	while (currentPtr != NULL)
-	{
+	while (currentPtr != NULL) {
 		cout << currentPtr->val;
 		cout << " -> ";
 		currentPtr = currentPtr->next;
