@@ -2,7 +2,8 @@
 #include <vector>
 using namespace std;
 
-struct ListNode {
+struct ListNode
+{
 	int val;
 	ListNode *next;
 	ListNode(int x) : val(x), next(NULL) {};
@@ -26,7 +27,7 @@ ListNode* insertAtFront(ListNode *head, const int &val)
 
 	if (head == NULL)
 		head = newPtr;
-	else 
+	else
 	{
 		newPtr->next = head;
 		head = newPtr;
@@ -53,25 +54,30 @@ ListNode* merge(ListNode *left, ListNode *right)
 	// trivial case
 	if (left == NULL) return right;
 	else if (right == NULL) return left;
-	
+
 	ListNode *newHead, *currentPtr;
-	if (left->val < right->val) {
+	if (left->val < right->val)
+	{
 		newHead = left;
 		left = left->next;
 		currentPtr = newHead;
 	}
-	else {
+	else
+	{
 		newHead = right;
 		right = right->next;
 		currentPtr = newHead;
 	}
-	
-	while (left != NULL and right != NULL) {
-		if (left->val < right ->val) {
+
+	while (left != NULL and right != NULL)
+	{
+		if (left->val < right ->val)
+		{
 			currentPtr->next = left;
 			left = left->next;
 		}
-		else {
+		else
+		{
 			currentPtr->next = right;
 			right = right->next;
 		}
@@ -85,12 +91,14 @@ ListNode* mergeKLists(vector<ListNode *> &lists)
 {
 	if (lists.size() == 0) return NULL;
 	else if (lists.size() == 1) return lists[0];
-	
+
 	auto left = lists.begin(),
-		 right = ++lists.begin();
-	while (right != lists.end()) {
+	     right = ++lists.begin();
+	while (right != lists.end())
+	{
 		*right = merge(*left, *right);
-		++left; ++right;
+		++left;
+		++right;
 	}
 
 	return *left;
@@ -99,9 +107,9 @@ ListNode* mergeKLists(vector<ListNode *> &lists)
 int main()
 {
 	ListNode *list_1 = NULL,
-			 *list_2 = NULL,
-			 *list_3 = NULL,
-			 *list_4 = NULL;
+	          *list_2 = NULL,
+	           *list_3 = NULL,
+	            *list_4 = NULL;
 	list_1 = insertAtFront(list_1, 6);
 	list_1 = insertAtFront(list_1, 3);
 	list_1 = insertAtFront(list_1, 3);
@@ -111,11 +119,11 @@ int main()
 	list_2 = insertAtFront(list_2, 5);
 	list_2 = insertAtFront(list_2, 2);
 	list_2 = insertAtFront(list_2, 1);
-	
+
 	list_3 = insertAtFront(list_3, 7);
 	list_3 = insertAtFront(list_3, 6);
 	list_3 = insertAtFront(list_3, 5);
-	
+
 	list_4 = insertAtFront(list_4, 10);
 	list_4 = insertAtFront(list_4, 9);
 	list_4 = insertAtFront(list_4, 4);
@@ -132,7 +140,7 @@ int main()
 	lists.push_back(list_2);
 	lists.push_back(list_3);
 	lists.push_back(list_4);
-	ListNode *mergedList = mergeKLists(lists);	
+	ListNode *mergedList = mergeKLists(lists);
 	print(mergedList);
 
 	deleteList(mergedList);
