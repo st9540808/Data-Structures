@@ -6,10 +6,11 @@
 #include <cstddef>
 
 template<typename NODETYPE>
-struct ListNode {
+struct ListNode
+{
 	NODETYPE val;
 	ListNode<NODETYPE> *next;
 	ListNode(NODETYPE x) : val(x), next(NULL) {};
 };
 
-#endif 
+#endif
