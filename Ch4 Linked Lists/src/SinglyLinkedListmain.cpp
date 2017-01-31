@@ -2,7 +2,6 @@
  * main funciton
  * with Linked lists checkers
  */
-
 #include <iostream>
 #include <random>
 #include <chrono>

@@ -1,53 +1,7 @@
 #include <iostream>
 #include <vector>
+#include "llist_basic.h"
 using namespace std;
-
-struct ListNode
-{
-	int val;
-	ListNode *next;
-	ListNode(int x) : val(x), next(NULL) {};
-};
-
-
-void deleteList(ListNode *head)
-{
-	ListNode *currentPtr = head, *tempPtr;
-	while (currentPtr != NULL)
-	{
-		tempPtr = currentPtr;
-		currentPtr = currentPtr->next;
-		delete tempPtr;
-	}
-}
-
-ListNode* insertAtFront(ListNode *head, const int &val)
-{
-	ListNode *newPtr = new ListNode(val);
-
-	if (head == NULL)
-		head = newPtr;
-	else
-	{
-		newPtr->next = head;
-		head = newPtr;
-	}
-	return head;
-}
-
-void print(ListNode *head)
-{
-	ListNode *currentPtr = head;
-
-	cout << "head -> ";
-	while (currentPtr != NULL)
-	{
-		cout << currentPtr->val;
-		cout << " -> ";
-		currentPtr = currentPtr->next;
-	}
-	cout << "null\n";
-}
 
 ListNode* merge(ListNode *left, ListNode *right)
 {
@@ -107,9 +61,9 @@ ListNode* mergeKLists(vector<ListNode *> &lists)
 int main()
 {
 	ListNode *list_1 = NULL,
-	          *list_2 = NULL,
-	           *list_3 = NULL,
-	            *list_4 = NULL;
+	         *list_2 = NULL,
+	         *list_3 = NULL,
+	         *list_4 = NULL;
 	list_1 = insertAtFront(list_1, 6);
 	list_1 = insertAtFront(list_1, 3);
 	list_1 = insertAtFront(list_1, 3);

@@ -10,6 +10,7 @@ using namespace std;
 
 int main()
 {
+	DLL myList;
 	
 	return 0;
 }

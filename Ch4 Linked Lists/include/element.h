@@ -7,7 +7,6 @@ struct element
 {
 	int key;
 	// other field
-	
 	element(int x) : key(x) {};
 };
 

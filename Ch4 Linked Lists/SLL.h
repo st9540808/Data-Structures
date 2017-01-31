@@ -2,27 +2,14 @@
  * Singly Linked list re-implementation
  * this will emphasize on advance operation on SLL
  */
+#ifndef SLL_RE_H
+#define SLL_RE_H
+
 #include <iostream>
 #include <random>
 #include <chrono>
+#include "ListNode_NoTemplate.h"
 using namespace std;
-
-#ifdef LISTNODE_H
-#undef LISTNODE_H
-#endif
-#ifndef LISTNODE_NOTEMPALTE_H
-#define LISTNODE_NOTEMPALTE_H
-
-struct ListNode
-{
-	int val;
-	ListNode *next;
-	ListNode(int x) : val(x), next(NULL) {};
-};
-
-#endif
-#ifndef SLL_RE_H
-#define SLL_RE_H
 
 class SLL
 {
