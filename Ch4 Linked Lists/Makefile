@@ -1,18 +1,22 @@
-all: main
+all: DLLmain
 
 objects =
 CXX = g++-6
-INCULDE = .
-CXXFLAGS = -g -Wall -std=gnu++14 
+INCULDE = -I include -I .
+CXXFLAGS = -g -Wall -std=gnu++14
+SRC = src
 
-main: main.cpp SLL.h $(objects)
-	$(CXX) main.cpp -o main -I $(INCULDE) $(objects) $(CXXFLAGS)
+DLLmain: ./src/DLLmain.cpp DLL.h $(objects)
+	$(CXX) ./src/DLLmain.cpp -o main $(INCULDE) $(CXXFLAGS) $(objects)
 
-merge:
-	$(CXX) merge.cpp -o main $(CXXFLAGS)
+SLLmain: ./src/SLLmain.cpp SLL.h $(objects)
+	$(CXX) ./src/SLLmain.cpp -o main $(INCULDE) $(CXXFLAGS) $(objects)
 
-check:
-	$(CXX) check.cpp -o main $(CXXFLAGS)
+merge: ./src/merge.cpp
+	$(CXX) ./src/merge.cpp -o main $(INCULDE) $(CXXFLAGS)
+
+check: ./src/check.cpp
+	$(CXX) ./src/check.cpp -o main $(INCULDE) $(CXXFLAGS)
 
 
 .PHONY: clean
