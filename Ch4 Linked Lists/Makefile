@@ -4,13 +4,16 @@ objects =
 CXX = g++-6
 INCULDE = -I include -I .
 CXXFLAGS = -g -Wall -std=gnu++14
-SRC = src
 
 DLL: ./src/DLLmain.cpp DLL.h $(objects)
 	$(CXX) ./src/DLLmain.cpp -o main $(INCULDE) $(CXXFLAGS) $(objects)
 
 SLL: ./src/SLLmain.cpp SLL.h $(objects)
 	$(CXX) ./src/SLLmain.cpp -o main $(INCULDE) $(CXXFLAGS) $(objects)
+
+Stack: ./src/SLLmain.cpp Stack.h
+	$(CXX) ./src/Stackmain.cpp -o main $(INCULDE) $(CXXFLAGS) $(objects)
+
 
 merge: ./src/merge.cpp
 	$(CXX) ./src/merge.cpp -o main $(INCULDE) $(CXXFLAGS)
