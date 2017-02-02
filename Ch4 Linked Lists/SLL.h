@@ -37,20 +37,20 @@ public:
 		return true;
 	}
 
-	void mergeSort()
+	void rmergeSort()
 	{
 		if (this->head == NULL) return;
-		this->head = mergeSort(this->head);
+		this->head = rmergeSort(this->head);
 	}
 
-	ListNode* mergeSort(ListNode *head)
+	ListNode* rmergeSort(ListNode *head)
 	{
 		if (head->next == NULL)
 			return head;
 		ListNode *mid = getMiddle(head);
 		ListNode *halfList = mid->next;
 		mid->next = NULL;
-		return merge(mergeSort(head), mergeSort(halfList));
+		return merge(rmergeSort(head), rmergeSort(halfList));
 	}
 
 	ListNode* merge(ListNode *left, ListNode *right)
