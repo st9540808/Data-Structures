@@ -1,41 +1,29 @@
 /**
  * Singly Linked list re-implementation
- * this will emphasize on advance operation on SLL
+ * this will emphasize on advance operation on SinglyLList
  */
-#ifndef SLL_RE_H
-#define SLL_RE_H
+#ifndef SINGLYLLIST_RE_H
+#define	SINGLYLLIST_RE_H
 
 #include <iostream>
 #include <random>
 #include <chrono>
 #include "ListNode_NoTemplate.h"
-using namespace std;
 
-class SLL
+class SinglyLList
 {
-private:
+protected:
 	ListNode *head;
 	uint32_t size;
 
 public:
-	SLL(int); // default to generate a random linked list of size 10
-	~SLL();
+	SinglyLList(int); // default to generate a random linked list of size 10
+	~SinglyLList();
 	void insertAtFront(const int &);
+	void deleteAtFront();
 	void print() const;
 	void print(ListNode *) const;
-	bool isSorted() const
-	{
-		if (this->head == NULL)
-			return true;
-		ListNode *currentPtr = this->head;
-		while (currentPtr->next != NULL)
-		{
-			if (currentPtr->next->val < currentPtr->val)
-				return false;
-			currentPtr = currentPtr->next;
-		}
-		return true;
-	}
+	bool isSorted() const;
 
 	void rmergeSort()
 	{
@@ -135,8 +123,7 @@ public:
 
 
 // methods that are less important
-SLL::SLL(int inputSize = 10)
-	: head(NULL), size(inputSize)
+SinglyLList::SinglyLList(int inputSize = 10) : head(NULL), size(inputSize)
 {
 	// random generate linked list
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
@@ -157,7 +144,7 @@ SLL::SLL(int inputSize = 10)
 	}
 }
 
-SLL::~SLL()
+SinglyLList::~SinglyLList()
 {
 	ListNode *currentPtr = this->head, *tempPtr;
 	while (currentPtr != NULL)
@@ -168,7 +155,7 @@ SLL::~SLL()
 	}
 }
 
-void SLL::insertAtFront(const int &val)
+void SinglyLList::insertAtFront(const int &val)
 {
 	ListNode *newPtr = new ListNode(val);
 
@@ -179,35 +166,60 @@ void SLL::insertAtFront(const int &val)
 		newPtr->next = head;
 		this->head = newPtr;
 	}
-	++size;
+	++this->size;
 }
 
-void SLL::print() const
+void SinglyLList::deleteAtFront()
+{
+	if (this->head != NULL)
+	{
+		ListNode *tempPtr = this->head;
+		this->head = this->head->next;
+		delete tempPtr;
+		--this->size;
+	}
+}
+
+void SinglyLList::print() const
 {
 	ListNode *currentPtr = this->head;
 
-	cout << "head -> ";
+	std::cout << "head -> ";
 	while (currentPtr != NULL)
 	{
-		cout << currentPtr->val;
-		cout << " -> ";
+		std::cout << currentPtr->val;
+		std::cout << " -> ";
 		currentPtr = currentPtr->next;
 	}
-	cout << "null\n";
+	std::cout << "null\n";
 }
 
-void SLL::print(ListNode *head) const
+void SinglyLList::print(ListNode *head) const
 {
 	ListNode *currentPtr = head;
 
-	cout << "head -> ";
+	std::cout << "head -> ";
 	while (currentPtr != NULL)
 	{
-		cout << currentPtr->val;
-		cout << " -> ";
+		std::cout << currentPtr->val;
+		std::cout << " -> ";
 		currentPtr = currentPtr->next;
 	}
-	cout << "null";
+	std::cout << "null";
+}
+
+bool SinglyLList::isSorted() const
+{
+	if (this->head == NULL)
+		return true;
+	ListNode *currentPtr = this->head;
+	while (currentPtr->next != NULL)
+	{
+		if (currentPtr->next->val < currentPtr->val)
+			return false;
+		currentPtr = currentPtr->next;
+	}
+	return true;
 }
 
 #endif

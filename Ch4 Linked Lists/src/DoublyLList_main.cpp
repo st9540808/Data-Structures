@@ -4,13 +4,13 @@
 #include <iomanip>
 #include <fstream>
 #include <ctime>
-#include "DLL.h"
+#include "DoublyLList.h"
 using namespace std::chrono;
 using namespace std;
 
 int main()
 {
-	DLL myList;
+	DoublyLList myList;
 	
 	return 0;
 }

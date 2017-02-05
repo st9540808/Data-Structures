@@ -1,12 +1,12 @@
 #ifndef STACK_H
 #define STACK_H
 #include <iostream>
-#include "SLL.h"
+#include "SinglyLList.h"
 
-class Stack : SLL
+class Stack : protected SinglyLList
 {
 public:
-	Stack() : SLL(0) {}
+	Stack() : SinglyLList(0) {}
 
 	bool isEmpty() const
 	{
@@ -23,22 +23,22 @@ public:
 		return this->head->val;
 	}
 
+	uint32_t getSize()
+	{
+		return this->size;
+	}
+	
 	int pop()
 	{
 		if (isEmpty() == true)
 		{
 			std::cerr << "stack is empty\n";
-			return INT32_MIN;
+			return INT32_MAX;
 		}
-		
+
 		int topValue = top();
 		this->deleteAtFront();
 		return topValue;
-	}
-
-	uint32_t getSize()
-	{
-		return this->size;
 	}
 
 	void printStack() const

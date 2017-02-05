@@ -1,15 +1,16 @@
-#include "SLL.h"
+#include <fstream>
+#include "SinglyLList.h"
 #include "simple_measure.h"
 
 int main()
 {
 	int n = 2000, h = 1;
-	ofstream insertionSortTime, rmergeSortTime;
+	std::ofstream insertionSortTime, rmergeSortTime;
 	insertionSortTime.open("./plot/insertionSortTime.out");
 	rmergeSortTime.open("./plot/rmergeSortTime.out");
 
-	outputResult(insertionSortTime, &SLL::insertionSort, n, h);
-	outputResult(rmergeSortTime, &SLL::rmergeSort, n, h);
+	outputResult(insertionSortTime, &SinglyLList::insertionSort, n, h);
+	outputResult(rmergeSortTime, &SinglyLList::rmergeSort, n, h);
 
 	insertionSortTime.close();
 	rmergeSortTime.close();

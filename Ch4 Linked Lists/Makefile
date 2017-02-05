@@ -1,18 +1,18 @@
-all: DLL
+all: DoublyLList
 
 objects =
 CXX = g++-6
 INCULDE = -I include -I .
 CXXFLAGS = -g -Wall -std=gnu++14
 
-DLL: ./src/DLLmain.cpp DLL.h $(objects)
-	$(CXX) ./src/DLLmain.cpp -o main $(INCULDE) $(CXXFLAGS) $(objects)
+DoublyLList: ./src/DoublyLList_main.cpp DoublyLList.h $(objects)
+	$(CXX) ./src/DoublyLList_main.cpp -o main $(INCULDE) $(CXXFLAGS) $(objects)
 
-SLL: ./src/SLLmain.cpp SLL.h $(objects)
-	$(CXX) ./src/SLLmain.cpp -o main $(INCULDE) $(CXXFLAGS) $(objects)
+SinglyLList: ./src/SinglyLList_main.cpp SinglyLList.h $(objects)
+	$(CXX) ./src/SinglyLList_main.cpp -o main $(INCULDE) $(CXXFLAGS) $(objects)
 
-Stack: ./src/SLLmain.cpp Stack.h
-	$(CXX) ./src/Stackmain.cpp -o main $(INCULDE) $(CXXFLAGS) $(objects)
+Stack: ./src/Stack_main.cpp SinglyLList.h Stack.h
+	$(CXX) ./src/Stack_main.cpp -o main $(INCULDE) $(CXXFLAGS) $(objects)
 
 
 merge: ./src/merge.cpp

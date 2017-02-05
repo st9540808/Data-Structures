@@ -1,9 +1,9 @@
 #include <iostream>
-#include "SLL.h"
+#include "SinglyLList.h"
 
 int main()
 {
-	SLL list(1000000);
+	SinglyLList list(10);
 	list.mergeSort();
 	cout << list.isSorted();
 
