@@ -6,6 +6,7 @@
 #define	SINGLYLLIST_RE_H
 
 #include <iostream>
+#include <vector>
 #include <random>
 #include <chrono>
 #include "ListNode_NoTemplate.h"
@@ -25,20 +26,41 @@ public:
 	void print(ListNode *) const;
 	bool isSorted() const;
 
-	void rmergeSort()
+	// adative sort using insertionsort and mergesort
+	void timSort()
 	{
-		if (this->head == NULL) return;
+
+	}
+
+	// natural mergesort
+	void naturalmergeSort()
+	{
+		std::vector<ListNode *> headVector(32);
+		ListNode *remainingList = head;
+	}
+
+	// iterative mergesort
+	void imergeSort()
+	{
+		std::vector<ListNode *> headVector(32);
+		ListNode *remainingList = this->head;
+	}
+
+	// recursive mergesort
+	void rmergeSort() 
+	{
+		if (this->head == nullptr) return;
 		this->head = rmergeSort(this->head);
 	}
 
 	ListNode* rmergeSort(ListNode *head)
 	{
-		if (head->next == NULL)
+		if (head->next == nullptr)
 			return head;
 		ListNode *mid = getMiddle(head);
 		ListNode *halfList = mid->next;
-		mid->next = NULL;
-		return merge(rmergeSort(head), rmergeSort(halfList));
+		mid->next = nullptr;
+		return merge_usingdummy(rmergeSort(head), rmergeSort(halfList));
 	}
 
 	ListNode* merge(ListNode *left, ListNode *right)
@@ -57,7 +79,7 @@ public:
 			currentPtr = newHead;
 		}
 
-		while (left != NULL and right != NULL)
+		while (left != nullptr and right != nullptr)
 		{
 			if (left->val < right ->val)
 			{
@@ -71,40 +93,68 @@ public:
 			}
 			currentPtr = currentPtr->next;
 		}
-		currentPtr->next = (right == NULL) ? left : right;
+		currentPtr->next = (right == nullptr) ? left : right;
 		return newHead;
 	}
 
-	ListNode* getMiddle(ListNode *head)
+	ListNode* merge_usingdummy(ListNode *left, ListNode *right)
 	{
-		ListNode *slowPtr = head, *fastPtr = head;
-		while (fastPtr->next != NULL
-		        and fastPtr->next->next != NULL)
+		ListNode dummy(0), *currentPtr = &dummy;
+		
+		while (left != nullptr and right != nullptr)
 		{
-			slowPtr = slowPtr->next;
-			fastPtr = fastPtr->next->next;
+			if (left->val < right ->val)
+			{
+				currentPtr->next = left;
+				left = left->next;
+			}
+			else
+			{
+				currentPtr->next = right;
+				right = right->next;
+			}
+			currentPtr = currentPtr->next;
 		}
-		return slowPtr;
+		currentPtr->next = (right == nullptr) ? left : right;
+		return dummy.next;
 	}
 
-	void insertionSort()   // stable sort
+	ListNode* mergekLists(std::vector<ListNode *> &lists)
 	{
-		if (this->head == NULL or this->head->next == NULL)
-			return;
+        if (lists.empty()) return nullptr;
+        auto len = lists.size();
+        while (len > 1)
+        {
+            for (decltype(len) i = 0; i < len / 2; ++i)
+                lists[i] = merge(lists[i], lists[len - 1 - i]);
+            len = (len + 1) / 2;
+        }
+        return lists.front();
+	}
+
+	 
+	// insertion sort (stable)
+	void insertionSort()
+	{ this->head = insertionSort(this->head);}
+
+	ListNode* insertionSort(ListNode *head) // stable sort
+	{
+		if (head == nullptr or head->next == nullptr)
+			return head;
 
 		// nextPtr is always one step ahead of currentPtr
-		ListNode *currentPtr = this->head, *nextPtr, *tempPtr;
-		while (currentPtr->next != NULL)
+		ListNode *currentPtr = head, *nextPtr, *tempPtr;
+		while (currentPtr->next != nullptr)
 		{
 			nextPtr = currentPtr->next;
 
 			if (nextPtr->val < currentPtr->val)
-				if (nextPtr->val < this->head->val)
+				if (nextPtr->val < head->val)
 				{
 					// insert in the front of the list
 					currentPtr->next = nextPtr->next;
 					nextPtr->next = head;
-					this->head = nextPtr;
+					head = nextPtr;
 				}
 				else
 				{
@@ -118,12 +168,27 @@ public:
 			else
 				currentPtr = currentPtr->next;
 		}
+		return head;
+	}
+
+private:
+	ListNode* getMiddle(ListNode *head)
+	{
+		ListNode *slowPtr = head, *fastPtr = head;
+		while (fastPtr->next != nullptr
+		        and fastPtr->next->next != nullptr)
+		{
+			slowPtr = slowPtr->next;
+			fastPtr = fastPtr->next->next;
+		}
+		return slowPtr;
 	}
 };
 
 
 // methods that are less important
-SinglyLList::SinglyLList(int inputSize = 10) : head(NULL), size(inputSize)
+SinglyLList::SinglyLList(int inputSize = 10)
+	: head(nullptr), size(inputSize)
 {
 	// random generate linked list
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
@@ -134,7 +199,7 @@ SinglyLList::SinglyLList(int inputSize = 10) : head(NULL), size(inputSize)
 	{
 		ListNode *newPtr = new ListNode(gen(generator));
 
-		if (this->head == NULL)
+		if (this->head == nullptr)
 			this->head = newPtr;
 		else
 		{
@@ -147,7 +212,7 @@ SinglyLList::SinglyLList(int inputSize = 10) : head(NULL), size(inputSize)
 SinglyLList::~SinglyLList()
 {
 	ListNode *currentPtr = this->head, *tempPtr;
-	while (currentPtr != NULL)
+	while (currentPtr != nullptr)
 	{
 		tempPtr = currentPtr;
 		currentPtr = currentPtr->next;
@@ -159,7 +224,7 @@ void SinglyLList::insertAtFront(const int &val)
 {
 	ListNode *newPtr = new ListNode(val);
 
-	if (this->head == NULL)
+	if (this->head == nullptr)
 		this->head = newPtr;
 	else
 	{
@@ -171,7 +236,7 @@ void SinglyLList::insertAtFront(const int &val)
 
 void SinglyLList::deleteAtFront()
 {
-	if (this->head != NULL)
+	if (this->head != nullptr)
 	{
 		ListNode *tempPtr = this->head;
 		this->head = this->head->next;
@@ -185,7 +250,7 @@ void SinglyLList::print() const
 	ListNode *currentPtr = this->head;
 
 	std::cout << "head -> ";
-	while (currentPtr != NULL)
+	while (currentPtr != nullptr)
 	{
 		std::cout << currentPtr->val;
 		std::cout << " -> ";
@@ -199,7 +264,7 @@ void SinglyLList::print(ListNode *head) const
 	ListNode *currentPtr = head;
 
 	std::cout << "head -> ";
-	while (currentPtr != NULL)
+	while (currentPtr != nullptr)
 	{
 		std::cout << currentPtr->val;
 		std::cout << " -> ";
@@ -210,10 +275,10 @@ void SinglyLList::print(ListNode *head) const
 
 bool SinglyLList::isSorted() const
 {
-	if (this->head == NULL)
+	if (this->head == nullptr)
 		return true;
 	ListNode *currentPtr = this->head;
-	while (currentPtr->next != NULL)
+	while (currentPtr->next != nullptr)
 	{
 		if (currentPtr->next->val < currentPtr->val)
 			return false;
