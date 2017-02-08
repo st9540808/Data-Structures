@@ -75,7 +75,7 @@ public:
 
 	// recursive mergesort
 	void rmergeSort() 
-	{ this->head = this->head == nullptr ? nullptr : rmergeSort(this->head);}
+	{ this->head = (this->head == nullptr) ? nullptr : rmergeSort(this->head);}
 
 	ListNode* rmergeSort(ListNode *head)
 	{
@@ -114,15 +114,15 @@ public:
 
 	ListNode* mergekLists(std::vector<ListNode *> &lists)
 	{
-        if (lists.empty()) return nullptr;
-        auto len = lists.size();
-        while (len > 1)
-        {
-            for (decltype(len) i = 0; i < len / 2; ++i)
-                lists[i] = merge(lists[i], lists[len - 1 - i]);
-            len = (len + 1) / 2;
-        }
-        return lists.front();
+		if (lists.empty()) return nullptr;
+		auto len = lists.size();
+		while (len > 1)
+		{
+			for (decltype(len) i = 0; i < len / 2; ++i)
+				lists[i] = merge(lists[i], lists[len - 1 - i]);
+			len = (len + 1) / 2;
+		}
+		return lists.front();
 	}
 
 	ListNode* getMiddle(ListNode *head)
