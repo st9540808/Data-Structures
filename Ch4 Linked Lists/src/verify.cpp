@@ -4,8 +4,9 @@
 int main()
 {
 	SinglyLList list(10);
-	list.mergeSort();
-	cout << list.isSorted();
+	list.imergeSort();
+	std::cout << list.isSorted() << std::endl;
+	std::cout << sizeof(ListNode) << std::endl;
 
 	return 0;
 }

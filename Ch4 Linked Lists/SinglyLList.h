@@ -6,6 +6,7 @@
 #define	SINGLYLLIST_RE_H
 
 #include <iostream>
+#include <algorithm>
 #include <vector>
 #include <random>
 #include <chrono>
@@ -25,6 +26,7 @@ public:
 	void print() const;
 	void print(ListNode *) const;
 	bool isSorted() const;
+//	void printPrem() const;
 
 	// adative sort using insertionsort and mergesort
 	void timSort()
@@ -39,19 +41,41 @@ public:
 		ListNode *remainingList = head;
 	}
 
-	// iterative mergesort
+	// iterative mergesort, it's capable of sorting 2^31-1 nodes (arround 34.36 GB)
 	void imergeSort()
 	{
-		std::vector<ListNode *> headVector(32);
+		std::vector<ListNode *> paritialLists(32, nullptr);
+		auto const beginIter = paritialLists.begin(), endIter = paritialLists.end();
 		ListNode *remainingList = this->head;
+		
+		while (remainingList != nullptr)
+		{
+			auto *result = remainingList;
+			remainingList = remainingList->next;
+			result->next = nullptr;
+			
+			if (paritialLists.front() == nullptr)
+				paritialLists.front() = result;
+			else
+			{
+				auto iter = beginIter;
+				for (; *iter != nullptr; ++iter)
+				{
+					result = merge(result, *iter);
+					*iter = nullptr;
+				}
+				*iter = result;
+			}
+		}
+		
+		for (auto iter = beginIter + 1; iter != endIter; ++iter)
+			*iter = merge(*(iter - 1), *iter);
+		this->head = paritialLists.back();
 	}
 
 	// recursive mergesort
 	void rmergeSort() 
-	{
-		if (this->head == nullptr) return;
-		this->head = rmergeSort(this->head);
-	}
+	{ this->head = this->head == nullptr ? nullptr : rmergeSort(this->head);}
 
 	ListNode* rmergeSort(ListNode *head)
 	{
@@ -60,47 +84,16 @@ public:
 		ListNode *mid = getMiddle(head);
 		ListNode *halfList = mid->next;
 		mid->next = nullptr;
-		return merge_usingdummy(rmergeSort(head), rmergeSort(halfList));
+		return merge(rmergeSort(head), rmergeSort(halfList));
 	}
 
 	ListNode* merge(ListNode *left, ListNode *right)
 	{
-		ListNode *newHead, *currentPtr;
-		if (left->val < right->val)
-		{
-			newHead = left;
-			left = left->next;
-			currentPtr = newHead;
-		}
-		else
-		{
-			newHead = right;
-			right = right->next;
-			currentPtr = newHead;
-		}
-
-		while (left != nullptr and right != nullptr)
-		{
-			if (left->val < right ->val)
-			{
-				currentPtr->next = left;
-				left = left->next;
-			}
-			else
-			{
-				currentPtr->next = right;
-				right = right->next;
-			}
-			currentPtr = currentPtr->next;
-		}
-		currentPtr->next = (right == nullptr) ? left : right;
-		return newHead;
-	}
-
-	ListNode* merge_usingdummy(ListNode *left, ListNode *right)
-	{
-		ListNode dummy(0), *currentPtr = &dummy;
+		if (left == nullptr) return right;
+		else if (right == nullptr) return left;
 		
+		static ListNode dummy(0);
+		ListNode *currentPtr = &dummy;
 		while (left != nullptr and right != nullptr)
 		{
 			if (left->val < right ->val)
@@ -132,6 +125,17 @@ public:
         return lists.front();
 	}
 
+	ListNode* getMiddle(ListNode *head)
+	{
+		ListNode *slowPtr = head, *fastPtr = head;
+		while (fastPtr->next != nullptr
+		        and fastPtr->next->next != nullptr)
+		{
+			slowPtr = slowPtr->next;
+			fastPtr = fastPtr->next->next;
+		}
+		return slowPtr;
+	}
 	 
 	// insertion sort (stable)
 	void insertionSort()
@@ -170,19 +174,6 @@ public:
 		}
 		return head;
 	}
-
-private:
-	ListNode* getMiddle(ListNode *head)
-	{
-		ListNode *slowPtr = head, *fastPtr = head;
-		while (fastPtr->next != nullptr
-		        and fastPtr->next->next != nullptr)
-		{
-			slowPtr = slowPtr->next;
-			fastPtr = fastPtr->next->next;
-		}
-		return slowPtr;
-	}
 };
 
 
@@ -193,7 +184,7 @@ SinglyLList::SinglyLList(int inputSize = 10)
 	// random generate linked list
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 	std::default_random_engine generator(seed);
-	std::uniform_int_distribution<int> gen(0, size * 5);
+	std::uniform_int_distribution<int> gen(0, size * 3);
 
 	for (uint32_t i = 0; i < size; ++i)
 	{
@@ -286,5 +277,21 @@ bool SinglyLList::isSorted() const
 	}
 	return true;
 }
+
+/*
+void SinglyLList::printPrem() const
+{
+	ListNode *currentPtr = this->head;
+
+	std::cout << "head -> ";
+	while (currentPtr != nullptr)
+	{
+		std::cout << currentPtr->perm;
+		std::cout << " -> ";
+		currentPtr = currentPtr->next;
+	}
+	std::cout << "null\n";
+}
+*/
 
 #endif

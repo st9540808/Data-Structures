@@ -4,15 +4,22 @@
 
 int main()
 {
-	int n = 2000, h = 1;
-	std::ofstream insertionSortTime, rmergeSortTime;
-	insertionSortTime.open("./plot/insertionSortTime.out");
+	int points = 100;
+	int n = 200000, h = n / points;
+//	std::ofstream insertionSortTime;
+	std::ofstream rmergeSortTime;
+	std::ofstream imergeSortTime;
+
+//	insertionSortTime.open("./plot/insertionSortTime.out");
 	rmergeSortTime.open("./plot/rmergeSortTime.out");
+	imergeSortTime.open("./plot/imergeSortTime.out");
 
-	outputResult(insertionSortTime, &SinglyLList::insertionSort, n, h);
+//	outputResult(insertionSortTime, &SinglyLList::insertionSort, n, h);
 	outputResult(rmergeSortTime, &SinglyLList::rmergeSort, n, h);
+	outputResult(imergeSortTime, &SinglyLList::imergeSort, n, h);
 
-	insertionSortTime.close();
+//	insertionSortTime.close();
 	rmergeSortTime.close();
+	imergeSortTime.close();
 	return 0;
 }
