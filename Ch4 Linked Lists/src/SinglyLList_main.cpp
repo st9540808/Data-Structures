@@ -2,24 +2,59 @@
 #include "SinglyLList.h"
 #include "simple_measure.h"
 
+void test_timSort_with_different_runSize();
+void test_iterative_mergeSort_and_variation(int n, int h);
+void test_recursive_mergeSort_and_insertionSort(int n, int h);
+
 int main()
 {
-	int points = 100;
-	int n = 200000, h = n / points;
-//	std::ofstream insertionSortTime;
+	int points = 150;
+	int n = 250000, h = n / points;
+	test_iterative_mergeSort_and_variation(n, h);
+
+	return 0;
+}
+
+
+void test_iterative_mergeSort_and_variation(int n, int h)
+{
 	std::ofstream rmergeSortTime;
 	std::ofstream imergeSortTime;
+	std::ofstream naturalmergeSortTime;
+	std::ofstream timSortTime;
 
-//	insertionSortTime.open("./plot/insertionSortTime.out");
+	{
+		SinglyLList list(100000);
+		list.timSort();
+	}
+
 	rmergeSortTime.open("./plot/rmergeSortTime.out");
 	imergeSortTime.open("./plot/imergeSortTime.out");
-
-//	outputResult(insertionSortTime, &SinglyLList::insertionSort, n, h);
+	naturalmergeSortTime.open("./plot/naturalmergeSortTime.out");
+	timSortTime.open("./plot/timSortTime.out");
+	
 	outputResult(rmergeSortTime, &SinglyLList::rmergeSort, n, h);
 	outputResult(imergeSortTime, &SinglyLList::imergeSort, n, h);
+	outputResult(naturalmergeSortTime, &SinglyLList::naturalmergeSort, n, h);
+	outputResult(timSortTime, &SinglyLList::timSort, n, h);
 
-//	insertionSortTime.close();
 	rmergeSortTime.close();
 	imergeSortTime.close();
-	return 0;
+	naturalmergeSortTime.close();
+	timSortTime.close();
+}
+
+void test_recursive_mergeSort_and_insertionSort(int n, int h)
+{
+	std::ofstream insertionSortTime;
+	std::ofstream rmergeSortTime;
+
+	insertionSortTime.open("./plot/insertionSortTime.out");
+	rmergeSortTime.open("./plot/rmergeSortTime.out");
+
+	outputResult(insertionSortTime, &SinglyLList::insertionSort, n, h);
+	outputResult(rmergeSortTime, &SinglyLList::rmergeSort, n, h);
+
+	insertionSortTime.close();
+	rmergeSortTime.close();
 }
