@@ -3,10 +3,17 @@
 
 int main()
 {
-	SinglyLList list(10);
-	list.imergeSort();
-	std::cout << list.isSorted() << std::endl;
-	std::cout << sizeof(ListNode) << std::endl;
+	SinglyLList list(9);
 
+	list.print();
+	list.printPrem();
+	std::cout << std::endl;
+
+	list.naturalmergeSort();
+
+	list.print();
+	list.printPrem();
+
+//	std::cout << sizeof(ListNode);
 	return 0;
 }
