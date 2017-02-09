@@ -142,6 +142,7 @@ bool SinglyLinkedList<NODETYPE>::isSorted() const
 	return true;
 }
 
+template<typename NODETYPE>
 void SinglyLinkedList<NODETYPE>::insertionSort() // stable sort
 {
 	if (head == NULL or head->next == NULL)
