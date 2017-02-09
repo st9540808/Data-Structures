@@ -8,6 +8,7 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include <array>
 #include <random>
 #include <chrono>
 #include "ListNode_NoTemplate.h"
@@ -26,25 +27,83 @@ public:
 	void print() const;
 	void print(ListNode *) const;
 	bool isSorted() const;
-//	void printPrem() const;
+	void printPrem() const;
+	
 
-	// adative sort using insertionsort and mergesort
+	// adative sort using insertionsort and merge
 	void timSort()
 	{
+		std::vector<ListNode *> paritialLists(27, nullptr); // lists of 2^i run
+		auto const beginIter = paritialLists.begin(), endIter = paritialLists.end();
+		auto const runSize = 15;
+		ListNode *remainingList = this->head;
+		
+		while (remainingList != nullptr)
+		{
+			auto *runHead = remainingList, *runTail = remainingList;
+			for (int i = 0; i < runSize and runTail->next != nullptr; ++i)
+				runTail = runTail->next;
+			remainingList = runTail->next;
+			runTail->next = nullptr;
 
+			if (paritialLists.front() == nullptr)
+				paritialLists.front() = this->insertionSort(runHead);
+			else
+			{
+				runHead = this->insertionSort(runHead);
+				auto iter = beginIter;
+				for (; *iter != nullptr; ++iter)
+				{
+					runHead = merge(*iter, runHead);
+					*iter = nullptr;
+				}
+				*iter = runHead;
+			}
+		}
+		
+		for (auto iter = beginIter + 1; iter != endIter; ++iter)
+			*iter = merge(*iter, *(iter - 1));
+		this->head = paritialLists.back();
 	}
 
 	// natural mergesort
 	void naturalmergeSort()
 	{
-		std::vector<ListNode *> headVector(32);
-		ListNode *remainingList = head;
+		std::array<ListNode *, 31> paritialLists = {nullptr}; // lists of 2^i runs
+		auto const beginIter = paritialLists.begin(), endIter = paritialLists.end();
+		ListNode *remainingList = this->head;
+		
+		while (remainingList != nullptr)
+		{
+			auto *runHead = remainingList, *runTail = remainingList;
+			while (runTail->next != nullptr and runTail->val <= runTail->next->val)
+				runTail = runTail->next;
+			remainingList = runTail->next;
+			runTail->next = nullptr;
+
+			if (paritialLists.front() == nullptr)
+				paritialLists.front() = runHead;
+			else
+			{
+				auto iter = beginIter;
+				for (; *iter != nullptr; ++iter)
+				{
+					runHead = merge(*iter, runHead);
+					*iter = nullptr;
+				}
+				*iter = runHead;
+			}
+		}
+		
+		for (auto iter = beginIter + 1; iter != endIter; ++iter)
+			*iter = merge(*iter, *(iter - 1));
+		this->head = paritialLists.back();
 	}
 
 	// iterative mergesort, it's capable of sorting 2^31-1 nodes (arround 34.36 GB)
 	void imergeSort()
 	{
-		std::vector<ListNode *> paritialLists(32, nullptr);
+		std::vector<ListNode *> paritialLists(32, nullptr); // lists of 2^i nodes
 		auto const beginIter = paritialLists.begin(), endIter = paritialLists.end();
 		ListNode *remainingList = this->head;
 		
@@ -61,7 +120,7 @@ public:
 				auto iter = beginIter;
 				for (; *iter != nullptr; ++iter)
 				{
-					result = merge(result, *iter);
+					result = merge(*iter, result);
 					*iter = nullptr;
 				}
 				*iter = result;
@@ -69,7 +128,7 @@ public:
 		}
 		
 		for (auto iter = beginIter + 1; iter != endIter; ++iter)
-			*iter = merge(*(iter - 1), *iter);
+			*iter = merge(*iter, *(iter - 1));
 		this->head = paritialLists.back();
 	}
 
@@ -95,19 +154,19 @@ public:
 		static ListNode dummy(0);
 		ListNode *currentPtr = &dummy;
 		while (left != nullptr and right != nullptr)
-		{
-			if (left->val < right ->val)
+			if (left->val <= right->val)
 			{
 				currentPtr->next = left;
 				left = left->next;
+				currentPtr = currentPtr->next;
 			}
 			else
 			{
 				currentPtr->next = right;
 				right = right->next;
+				currentPtr = currentPtr->next;
 			}
-			currentPtr = currentPtr->next;
-		}
+
 		currentPtr->next = (right == nullptr) ? left : right;
 		return dummy.next;
 	}
@@ -184,11 +243,11 @@ SinglyLList::SinglyLList(int inputSize = 10)
 	// random generate linked list
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 	std::default_random_engine generator(seed);
-	std::uniform_int_distribution<int> gen(0, size * 3);
+	std::uniform_int_distribution<int> gen(0, size);
 
 	for (uint32_t i = 0; i < size; ++i)
 	{
-		ListNode *newPtr = new ListNode(gen(generator));
+		ListNode *newPtr = new ListNode(gen(generator), size - i);
 
 		if (this->head == nullptr)
 			this->head = newPtr;
@@ -278,7 +337,6 @@ bool SinglyLList::isSorted() const
 	return true;
 }
 
-/*
 void SinglyLList::printPrem() const
 {
 	ListNode *currentPtr = this->head;
@@ -292,6 +350,5 @@ void SinglyLList::printPrem() const
 	}
 	std::cout << "null\n";
 }
-*/
 
 #endif
