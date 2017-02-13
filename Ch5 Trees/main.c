@@ -1,10 +1,10 @@
 #include <stdio.h>
-#include "BT.h"
+#include "BST.h"
 
 int main()
 {
-	BT bt = BT();
-	bt.BT_constructor(&bt);
-
+	BST tree1 = BST_create();
+	tree1.insert();	
+	
 	return 0;
 }

@@ -5,7 +5,7 @@ CC = gcc-6
 INCULDE = .
 CFLAGS = -g -Wall -Wextra -std=c99 
 
-main: main.c $(objects)
+main: main.c BST.h $(objects)
 	$(CC) -o main main.c -I $(INCULDE) $(CFLAGS) $(objects)
 
 

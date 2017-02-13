@@ -7,16 +7,14 @@
 #define BT_H
 
 typedef struct BT {
-	void (*BT_constructor)(struct BT *bt);
+	void (*BT_ctor)(struct BT *bt);
 	TreeNode *root;
 } BT;
 
-void BT_init(BT *binaryTree) {
-	binaryTree->root = NULL;
-}
+void BT_init(BT *binaryTree) {}
 
 
-#define BT() { \
+#define BT_create() { \
 	.BT_constructor = BT_init, \
 	.root = NULL \
 } 
