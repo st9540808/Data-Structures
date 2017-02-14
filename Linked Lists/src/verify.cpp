@@ -4,15 +4,8 @@
 int main()
 {
 	SinglyLList list(9);
-
+	list.insertionSort();
 	list.print();
-	list.printPrem();
-	std::cout << std::endl;
-
-	list.naturalmergeSort();
-
-	list.print();
-	list.printPrem();
 
 //	std::cout << sizeof(ListNode);
 	return 0;

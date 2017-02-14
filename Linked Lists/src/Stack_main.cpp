@@ -19,7 +19,7 @@ int main()
 	cout << myStack.pop() << endl;
 	cout << myStack.pop() << endl;
 	cout << myStack.pop() << endl;
-	cout << myStack.isEmpty();
+	cout << myStack.isStackEmpty();
 
 	return 0;
 }

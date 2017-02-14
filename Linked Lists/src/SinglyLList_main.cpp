@@ -8,8 +8,8 @@ void test_recursive_mergeSort_and_insertionSort(int n, int h);
 
 int main()
 {
-	int points = 150;
-	int n = 250000, h = n / points;
+	int points = 50;
+	int n = 1000000, h = n / points;
 	test_iterative_mergeSort_and_variation(n, h);
 
 	return 0;

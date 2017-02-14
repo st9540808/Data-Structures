@@ -1,10 +1,11 @@
 /**
  * Binary Search Tree definition
  */
-#include <stdio.h>
-#include "TreeNode.h"
 #ifndef BST_H
 #define BST_H
+
+#include <stdio.h>
+#include "TreeNode.h"
 
 typedef struct BST {
 	TreeNode *root;

@@ -5,16 +5,16 @@
 #define DOUBLYLLIST_H
 
 #include <iostream>
-#include "element.h"
 
 class DoublyLList
 {
 	struct Node
 	{
-		element data;
+		int val, perm;
 		Node *prev;
 		Node *next;
-		Node(int x) : data(x), prev(nullptr), next(nullptr) {};
+		Node(int x) : val(x), prev(nullptr), next(nullptr) {};
+		Node(int x, int y) : val(x), perm(y), prev(nullptr), next(nullptr) {};
 	};
 
 private:
@@ -23,7 +23,8 @@ private:
 	uint32_t size; // unused for now
 
 public:
-	DoublyLList(int inputSize = 10) : head(nullptr), tail(nullptr), size(inputSize)
+	DoublyLList(int inputSize = 10)
+		: head(nullptr), tail(nullptr), size(inputSize)
 	{	
 	}
 

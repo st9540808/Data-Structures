@@ -1,5 +1,6 @@
 #ifndef SIMPLE_MEASURE_H
 #define SIMPLE_MEASURE_H
+
 #include <iostream>
 #include <random>
 #include <chrono>

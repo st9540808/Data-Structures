@@ -7,33 +7,48 @@
 
 #include <iostream>
 #include <algorithm>
-#include <vector>
 #include <array>
 #include <random>
 #include <chrono>
-#include "ListNode_NoTemplate.h"
 
 class SinglyLList
 {
-protected:
+	struct ListNode
+	{
+		int val;
+		int perm; // used to check stable sort
+		ListNode *next;
+		ListNode(int x) : val(x), next(nullptr) {};
+		ListNode(int x, int y) : val(x), perm(y), next(nullptr) {};
+	};
+
+private:
 	ListNode *head;
 	uint32_t size;
 
 public:
 	SinglyLList(int); // default to generate a random linked list of size 10
 	~SinglyLList();
+	ListNode* create() {return nullptr;}
+	ListNode* getList() const {return this->head;}
 	void insertAtFront(const int &);
 	void deleteAtFront();
 	void print() const;
 	void print(ListNode *) const;
 	bool isSorted() const;
+	bool isEmpty() const {return head == nullptr;}
+	uint32_t getSize() const {return size;}
 	void printPrem() const;
-	
+
+	void reverseList()
+	{
+
+	}
 
 	// adative sort using insertionsort and merge
 	void timSort()
 	{
-		std::vector<ListNode *> paritialLists(27, nullptr); // lists of 2^i run
+		std::array<ListNode *, 28> paritialLists = {nullptr}; // lists of 2^i runs
 		auto const beginIter = paritialLists.begin(), endIter = paritialLists.end();
 		auto const runSize = 15;
 		ListNode *remainingList = this->head;
@@ -103,7 +118,7 @@ public:
 	// iterative mergesort, it's capable of sorting 2^31-1 nodes (arround 34.36 GB)
 	void imergeSort()
 	{
-		std::vector<ListNode *> paritialLists(32, nullptr); // lists of 2^i nodes
+		std::array<ListNode *, 31> paritialLists = {nullptr}; // lists of 2^i nodes
 		auto const beginIter = paritialLists.begin(), endIter = paritialLists.end();
 		ListNode *remainingList = this->head;
 		
@@ -237,8 +252,8 @@ public:
 
 
 // methods that are less important
-SinglyLList::SinglyLList(int inputSize = 10)
-	: head(nullptr), size(inputSize)
+SinglyLList::SinglyLList(int inputSize = 0)
+: head(nullptr), size(inputSize)
 {
 	// random generate linked list
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
@@ -297,9 +312,13 @@ void SinglyLList::deleteAtFront()
 
 void SinglyLList::print() const
 {
-	ListNode *currentPtr = this->head;
+	print(this->head);
+}
 
-	std::cout << "head -> ";
+void SinglyLList::print(ListNode *head) const
+{
+	ListNode *currentPtr = head;
+
 	while (currentPtr != nullptr)
 	{
 		std::cout << currentPtr->val;
@@ -307,20 +326,6 @@ void SinglyLList::print() const
 		currentPtr = currentPtr->next;
 	}
 	std::cout << "null\n";
-}
-
-void SinglyLList::print(ListNode *head) const
-{
-	ListNode *currentPtr = head;
-
-	std::cout << "head -> ";
-	while (currentPtr != nullptr)
-	{
-		std::cout << currentPtr->val;
-		std::cout << " -> ";
-		currentPtr = currentPtr->next;
-	}
-	std::cout << "null";
 }
 
 bool SinglyLList::isSorted() const
