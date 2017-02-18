@@ -29,7 +29,6 @@ private:
 public:
 	SinglyLList(int); // default to generate a random linked list of size 10
 	~SinglyLList();
-	ListNode* create() {return nullptr;}
 	ListNode* getList() const {return this->head;}
 	void insertAtFront(const int &);
 	void deleteAtFront();

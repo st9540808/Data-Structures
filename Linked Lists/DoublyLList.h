@@ -23,7 +23,7 @@ private:
 	uint32_t size; // unused for now
 
 public:
-	DoublyLList(int inputSize = 10)
+	DoublyLList(int inputSize = 0)
 		: head(nullptr), tail(nullptr), size(inputSize)
 	{	
 	}

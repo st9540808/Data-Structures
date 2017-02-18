@@ -1,12 +1,15 @@
 all: main
 
-objects = 
+objects = #BST.o
 CC = gcc-6
 INCULDE = .
 CFLAGS = -g -Wall -Wextra -std=c99 
 
 main: main.c BST.h $(objects)
-	$(CC) -o main main.c -I $(INCULDE) $(CFLAGS) $(objects)
+	$(CC) -o main main.c $(objects) -I $(INCULDE) $(CFLAGS)
+
+BST.o: BST.h BST.c
+	$(CC) -c BST.c -I $(INCULDE) $(CFLAGS)
 
 
 .PHONY: clean

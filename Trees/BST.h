@@ -18,8 +18,8 @@ static void BST_insert(void)
 }
 
 #define BST_create() { \
+	.root = NULL, \
 	.insert = BST_insert, \
-	.root = NULL \
 } 
 
 #endif
