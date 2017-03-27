@@ -5,6 +5,7 @@
 !*.cpp
 !*.h
 !*.c
+!*.md
 test.cpp
 test.c
 
