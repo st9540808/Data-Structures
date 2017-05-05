@@ -1,4 +1,4 @@
-# Discrete Math Proposal
+# Probability and Statistic Proposal
 
 Compare different sorting algorithms on linked lists
 
