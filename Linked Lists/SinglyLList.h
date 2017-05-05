@@ -14,7 +14,7 @@
 class SinglyLList {
 	struct ListNode {
 		int val;
-		int perm; // used to check stable sort
+		int perm; // is used to check stable sorting
 		ListNode *next;
 		ListNode(int x) : val(x), next(nullptr) {};
 		ListNode(int x, int y) : val(x), perm(y), next(nullptr) {};
