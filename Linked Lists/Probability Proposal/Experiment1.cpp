@@ -6,7 +6,7 @@
 
 int main()
 {
-	const int total_iterations = 100000;
+	const int total_iterations = 500000;
 	std::ofstream probability1;
 	std::ofstream probability2;
 	probability1.open("./Data and Plot/Experiment1_data_1.out");
