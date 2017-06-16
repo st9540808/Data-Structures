@@ -10,6 +10,7 @@
 #include <array>
 #include <random>
 #include <chrono>
+#include <unistd.h>
 
 class SinglyLList {
 	struct ListNode {
@@ -33,12 +34,13 @@ public:
 	~SinglyLList();
 	
 	ListNode*  getList() const          { return this->head; }
+	bool       isEmpty() const          { return head == nullptr; }
+	uint32_t   getSize() const          { return size; }
 	void       print() const;
 	void       print(ListNode *) const;
 	bool       isSorted() const;
-	bool       isEmpty() const          { return head == nullptr; }
-	uint32_t   getSize() const          { return size; }
 	void       printPrem() const;
+	void       insertAtFront(int);
 
 
 	// natural mergesort
@@ -165,24 +167,16 @@ public:
 			return head;
 
 		// nextPtr is always one step ahead of currentPtr
-		ListNode *currentPtr = head, *nextPtr, *tempPtr;
+		ListNode *currentPtr = head, *nextPtr, **tempPtr;
 		while (currentPtr->next != nullptr) {
 			nextPtr = currentPtr->next;
-
 			if (nextPtr->val < currentPtr->val) {
-				if (nextPtr->val < head->val) {
-					// insert in the front of the list
-					currentPtr->next = nextPtr->next;
-					nextPtr->next = head;
-					head = nextPtr;
-				} else {
-					for (tempPtr = head;
-					        tempPtr->next != currentPtr and tempPtr->next->val <= nextPtr->val;
-					        tempPtr = tempPtr->next) ;
-					currentPtr->next = nextPtr->next;
-					nextPtr->next = tempPtr->next;
-					tempPtr->next = nextPtr;
-				}
+				tempPtr = &head;
+				for (; *tempPtr != nextPtr and (*tempPtr)->val < nextPtr->val
+				     ; tempPtr = &(*tempPtr)->next) ;
+				currentPtr->next = nextPtr->next;
+				nextPtr->next = *tempPtr;
+				*tempPtr = nextPtr;
 			} else {
 				currentPtr = currentPtr->next;
 			}
@@ -208,8 +202,7 @@ SinglyLList::SinglyLList(int inputSize = 0, int range = 0)
 
 		if (this->head == nullptr) {
 			this->head = newPtr;
-		}
-		else {
+		} else {
 			newPtr->next = head;
 			this->head = newPtr;
 		}
@@ -249,6 +242,14 @@ SinglyLList::~SinglyLList()
 		currentPtr = currentPtr->next;
 		delete tempPtr;
 	}
+}
+
+void SinglyLList::insertAtFront(int val)
+{
+	ListNode *newNode = new ListNode(val);
+	ListNode *list = this->head;
+	newNode->next = list;
+	this->head = newNode;
 }
 
 void SinglyLList::print() const
