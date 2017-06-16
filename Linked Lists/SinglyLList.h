@@ -41,41 +41,6 @@ public:
 	void       printPrem() const;
 
 
-	// adative sort using insertionsort and merge
-	void timSort(const int runSize = 15)
-	{
-		std::array<ListNode *, 28> paritialLists = {nullptr}; // lists of 2^i runs
-		auto const beginIter = paritialLists.begin();
-		auto const endIter   = paritialLists.end();
-		ListNode *remainingList = this->head;
-		
-		while (remainingList != nullptr) {
-			auto *runHead = remainingList, *runTail = remainingList;
-			for (int i = 0; i < runSize and runTail->next != nullptr; ++i)
-				runTail = runTail->next;
-			remainingList = runTail->next;
-			runTail->next = nullptr;
-
-			if (paritialLists.front() == nullptr) {
-				paritialLists.front() = this->insertionSort(runHead);
-			}
-			else {
-				runHead = this->insertionSort(runHead);
-				auto iter = beginIter;
-				for (; *iter != nullptr; ++iter) {
-					runHead = merge(*iter, runHead);
-					*iter = nullptr;
-				}
-				*iter = runHead;
-			}
-		}
-		
-		for (auto iter = beginIter + 1; iter != endIter; ++iter) {
-			*iter = merge(*iter, *(iter - 1));
-		}
-		this->head = paritialLists.back();
-	}
-
 	// natural mergesort
 	void naturalmergeSort() {
 		std::array<ListNode *, 31> paritialLists = {nullptr}; // lists of 2^i runs
@@ -91,8 +56,7 @@ public:
 
 			if (paritialLists.front() == nullptr) {
 				paritialLists.front() = runHead;
-			}
-			else {
+			} else {
 				auto iter = beginIter;
 				for (; *iter != nullptr; ++iter) {
 					runHead = merge(*iter, runHead);
@@ -120,8 +84,7 @@ public:
 			
 			if (paritialLists.front() == nullptr) {
 				paritialLists.front() = result;
-			}
-			else {
+			} else {
 				auto iter = beginIter;
 				for (; *iter != nullptr; ++iter) {
 					result = merge(*iter, result);
@@ -161,8 +124,7 @@ public:
 				currentPtr->next = left;
 				left = left->next;
 				currentPtr = currentPtr->next;
-			}
-			else {
+			} else {
 				currentPtr->next = right;
 				right = right->next;
 				currentPtr = currentPtr->next;
@@ -207,14 +169,13 @@ public:
 		while (currentPtr->next != nullptr) {
 			nextPtr = currentPtr->next;
 
-			if (nextPtr->val < currentPtr->val)
+			if (nextPtr->val < currentPtr->val) {
 				if (nextPtr->val < head->val) {
 					// insert in the front of the list
 					currentPtr->next = nextPtr->next;
 					nextPtr->next = head;
 					head = nextPtr;
-				}
-				else {
+				} else {
 					for (tempPtr = head;
 					        tempPtr->next != currentPtr and tempPtr->next->val <= nextPtr->val;
 					        tempPtr = tempPtr->next) ;
@@ -222,8 +183,9 @@ public:
 					nextPtr->next = tempPtr->next;
 					tempPtr->next = nextPtr;
 				}
-			else
+			} else {
 				currentPtr = currentPtr->next;
+			}
 		}
 		return head;
 	}
@@ -232,8 +194,8 @@ public:
 
 // methods that are less important
 SinglyLList::SinglyLList(int inputSize = 0, int range = 0)
-	: head(nullptr)
-	, size(inputSize)
+: head(nullptr)
+, size(inputSize)
 {
 	if (range == 0) range = inputSize;
 	// random generate linked list
@@ -255,8 +217,8 @@ SinglyLList::SinglyLList(int inputSize = 0, int range = 0)
 }
 
 SinglyLList::SinglyLList(const SinglyLList& rhs)
-	: head(nullptr)
-	, size(rhs.size)
+: head(nullptr)
+, size(rhs.size)
 {
 	if (this != &rhs) {
 		ListNode *const *rhsPtr = &rhs.head;

@@ -3,10 +3,8 @@
 
 int main()
 {
-	SinglyLList list(9);
-	list.insertionSort();
-	list.print();
+	SinglyLList list(25);
+	list.rmergeSort();
 
-//	std::cout << sizeof(ListNode);
 	return 0;
 }
